@@ -36,7 +36,7 @@ def get_includes():
     ]
     for i in includes:
         i = i.replace("{gcc}", str_path(get_gcc_path()) + "/")
-        ret.append("-I" + i)
+        ret.append("-isystem " + i)
     return ret
 
 
