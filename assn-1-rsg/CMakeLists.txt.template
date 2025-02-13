@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.22)
+
+project(assn1)
+
+set(SOURCES
+definition.cc
+production.cc
+random.cc
+rsg.cc
+)
+
+set(CMAKE_CXX_COMPILER
+    g++)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS true)
+
+add_executable(rsg ${SOURCES})
+
+target_include_directories(rsg "{gcc}include/c++/13.2.0")
+target_include_directories(rsg "{gcc}x86_64-w64-mingw32/include")
+target_include_directories(rsg "{gcc}include/c++/13.2.0/x86_64-w64-mingw32")
