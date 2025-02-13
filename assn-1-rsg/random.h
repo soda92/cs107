@@ -9,15 +9,14 @@
  */
 
 class RandomGenerator {
-  
- public: 
-  
+
+ public:
   /**
    * Constructor: RandomGenerator
    * ----------------------------
    * Constructs a new RandomGenerator object.
    */
-  
+
   RandomGenerator();
 
   /**
@@ -25,7 +24,7 @@ class RandomGenerator {
    * ------------------------
    * Generates a seemingly random integer between the two specified
    * integers, inclusive.  All numbers in the range [low, high] are
-   * equally likely outcomes.  If low and high are the same, then 
+   * equally likely outcomes.  If low and high are the same, then
    * that number is guaranteed to be returned.  If low is greater than
    * high, then getRandomInteger asserts and ends the program.
    *
@@ -33,9 +32,8 @@ class RandomGenerator {
    * @param the highest number we'd like to be considered as a return value.
    * @return some number drawn uniformly from the range [low, high].
    */
-  
-  int getRandomInteger(int low, int high);  
+
+  int getRandomInteger(int low, int high);
 };
 
 #endif // ! __random__
-

@@ -1,37 +1,20 @@
-##
-## Makefile for CS107 Assignment 1: Random Sentence Generator
-##
+CMAKE ?= cmake
+BUILD_DIR ?= build
 
-CPPFLAGS = -g -Wall
+.PHONY: all build clean configure install
 
-CXX = g++
-LDFLAGS = 
+all: build
 
-CLASS = random.cc production.cc definition.cc
-CLASS_H = $(SRCS:.cc=.h)
-SRCS = rsg.cc $(CLASS)
-OBJS = $(SRCS:.cc=.o)
-PROGS = rsg
+configure:
+	python gen_cmake.py
+	$(CMAKE) -B $(BUILD_DIR) -GNinja
 
-default : $(PROGS) 
+build: configure
+	cmake --build build
+	# pwsh -c "cp build/compile_commands.json .."
+	python gen_lsp.py
+	python reformat.py
+	go build .
 
-$(PROGS) : depend $(OBJS)
-	$(CXX) -o $@ $(OBJS)   $(LDFLAGS) 
-
-# The dependencies below make use of make's default rules,
-# under which a .o automatically depends on its .c and
-# the action taken uses the $(CC) and $(CFLAGS) variables.
-# These lines describe a few extra dependencies involved.
-
-depend:: Makefile.dependencies $(SRCS) $(HDRS)
-
-Makefile.dependencies:: $(SRCS) $(HDRS)
-	$(CXX) $(CPPFLAGS) -MM $(SRCS) > Makefile.dependencies
-
--include Makefile.dependencies
-
-clean : 
-	rm -f *.o a.out core $(PROGS) Makefile.dependencies
-
-TAGS : $(SRCS) $(HDRS)
-	etags -t $(SRCS) $(HDRS)
+clean:
+	pwsh -c "rm -r $(BUILD_DIR)"

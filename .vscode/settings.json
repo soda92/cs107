@@ -1,0 +1,13 @@
+{
+    "neocmakelsp.tcp": false,
+    "files.associations": {
+        "*.gradle": "groovy",
+        "*.json": "jsonc",
+        "*.svelte": "svelte",
+        "CMakeLists.txt.template": "cmake",
+        "map": "cpp",
+        "vector": "cpp",
+        "fstream": "cpp",
+        "string": "cpp"
+    }
+}

@@ -1,0 +1,27 @@
+BasedOnStyle: WebKit
+IndentWidth: 2
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterEnum: true
+  AfterStruct: true
+  SplitEmptyFunction: false
+  AfterControlStatement: false
+  AfterFunction: true
+
+PointerAlignment: Right
+ReferenceAlignment: Left
+
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '<[[:alnum:].]+>'
+    Priority:        1
+    SortPriority:    1
+  - Regex:           '.*'
+    Priority:        2
+    SortPriority:    2
+
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AccessModifierOffset: -1
+SpaceInEmptyBlock: false
+
+PackConstructorInitializers: CurrentLine

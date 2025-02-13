@@ -5,9 +5,10 @@
  * the Definition class, which is really
  * nothing more than an ordered pair: a nonterminal
  * attached to a string.
- */ 
- 
+ */
+
 #include "definition.h"
+
 #include "random.h"
 
 /**
@@ -32,7 +33,7 @@ Definition::Definition(ifstream& infile)
     Production possibleExpansion(infile);
     possibleExpansions.push_back(possibleExpansion);
   }
-  
+
   getline(infile, uselessText, '}');
 }
 
@@ -47,7 +48,7 @@ Definition::Definition(ifstream& infile)
 
 const Production& Definition::getRandomProduction() const
 {
-  static RandomGenerator random; 
+  static RandomGenerator random;
   int randomIndex = random.getRandomInteger(0, possibleExpansions.size() - 1);
   return possibleExpansions[randomIndex];
 }

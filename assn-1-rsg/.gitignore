@@ -1,0 +1,9 @@
+*.o
+*.exe
+
+
+/build
+/.cache
+
+
+/CMakeLists.txt
