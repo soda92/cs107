@@ -1,0 +1,6 @@
+{
+    "neocmakelsp.tcp": false,
+    "files.associations": {
+        "CMakeLists.txt.template": "cmake"
+    }
+}
