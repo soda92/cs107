@@ -7,7 +7,7 @@
 /**
  * Constructor: RandomGenerator
  * ----------------------------
- * Initializes a RandomGenerator number generator, using 
+ * Initializes a RandomGenerator number generator, using
  * informtaion based on the current time as the seed.
  * This is the traditional way to set the stage for a computer
  * program to use random numbers.
@@ -31,7 +31,7 @@ int RandomGenerator::getRandomInteger(int low, int high)
 {
   assert(low <= high);
   double percent = (rand() / (static_cast<double>(RAND_MAX) + 1));
-  assert(percent >= 0.0 && percent < 1.0); 
+  assert(percent >= 0.0 && percent < 1.0);
   int offset = static_cast<int>(percent * (high - low + 1));
   return low + offset;
 }

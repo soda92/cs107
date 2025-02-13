@@ -10,14 +10,14 @@
  * it's possible expansions.
  */
 
-#include "production.h"
 #include <vector>
-using namespace std;  
+
+#include "production.h"
+using namespace std;
 
 class Definition {
-  
+
  public:
-  
   /**
    * Default Constructor: Definition
    * -------------------------------
@@ -28,9 +28,9 @@ class Definition {
    * in a vector or some other STL container that
    * requires its elements to have a default constructor.
    */
-  
+
   Definition() {}
-  
+
   /**
    * ifstream Constructor: Definition
    * --------------------------------
@@ -38,7 +38,7 @@ class Definition {
    * based on the contents of the specified ifstream.  The
    * contents of the file must adhere to the following
    * textual representation:
-   * 
+   *
    *			{
    *			<non-terminal>
    *				<production-1> ;
@@ -59,22 +59,22 @@ class Definition {
    *               the implementation makes no guarantees as to how the
    *               constructor behaves.
    */
-  
+
   Definition(ifstream& infile);
 
   /**
    * Method: getNonterminal
    * ----------------------
-   * Returns a constant reference to the 
+   * Returns a constant reference to the
    * embedded nonterminal.
    *
    * @return an immutable reference to a string, which stores
    *         the nonterminal string (with the '<' and '>' on
    *         either side.
    */
-  
+
   const string& getNonterminal() const { return nonterminal; }
-  
+
   /**
    * Method: getRandomProduction
    * ---------------------------
@@ -86,9 +86,9 @@ class Definition {
    *         Production held by the Definition.  It is assumed
    *         that the Definition has at least one Production.
    */
-  
+
   const Production& getRandomProduction() const;
-  
+
  private:
   string nonterminal;
   vector<Production> possibleExpansions;
