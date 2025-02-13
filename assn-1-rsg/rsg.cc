@@ -7,6 +7,10 @@
  * classes provided with the assignment.
  */
 
+extern "C" {
+#include "main.h"
+}
+
 #include <fstream>
 #include <map>
 
@@ -56,25 +60,19 @@ static void readGrammar(ifstream& infile, map<string, Definition>& grammar)
  *             token is represented as a '\0'-terminated C string.
  */
 
-int main(int argc, char *argv[])
+char *rsg_main(char *file)
 {
-  if (argc == 1) {
-    cerr << "You need to specify the name of a grammar file." << endl;
-    cerr << "Usage: rsg <path to grammar text file>" << endl;
-    return 1; // non-zero return value means something bad happened
-  }
-
-  ifstream grammarFile(argv[1]);
+  ifstream grammarFile(file);
+  char *buffer = (char *)calloc(256, sizeof(char));
   if (grammarFile.fail()) {
-    cerr << "Failed to open the file named \"" << argv[1] << "\".  Check to ensure the file exists. " << endl;
-    return 2; // each bad thing has its own bad return value
+    cerr << "Failed to open the file named \"" << file << "\".  Check to ensure the file exists. " << endl;
+    // return 2; // each bad thing has its own bad return value
+    return buffer;
   }
 
   // things are looking good...
   map<string, Definition> grammar;
   readGrammar(grammarFile, grammar);
-  cout << "The grammar file called \"" << argv[1] << "\" contains "
-       << grammar.size() << " definitions." << endl;
-
-  return 0;
+  sprintf(buffer, "The grammar file called %s contains %d definitions.\n", file, grammar.size());
+  return buffer;
 }

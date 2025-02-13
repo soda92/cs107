@@ -14,7 +14,7 @@ set(CMAKE_CXX_COMPILER
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 
-add_executable(rsg ${SOURCES})
+add_library(rsg ${SOURCES})
 
 target_include_directories(rsg PRIVATE "{gcc}include/c++/13.2.0")
 target_include_directories(rsg PRIVATE "{gcc}x86_64-w64-mingw32/include")
