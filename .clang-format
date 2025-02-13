@@ -13,7 +13,7 @@ ReferenceAlignment: Left
 
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '<[[:alnum:].\.]+>'
+  - Regex:           '<[[:alnum:].]+>'
     Priority:        1
     SortPriority:    1
   - Regex:           '.*'
@@ -23,3 +23,5 @@ IncludeCategories:
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AccessModifierOffset: -1
 SpaceInEmptyBlock: false
+
+PackConstructorInitializers: CurrentLine

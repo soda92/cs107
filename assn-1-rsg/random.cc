@@ -1,8 +1,9 @@
-#include <time.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <cassert> // for assert macro
 #include "random.h"
+
+#include <cassert> // for assert macro
+#include <limits.h>
+#include <stdlib.h>
+#include <time.h>
 
 /**
  * Constructor: RandomGenerator

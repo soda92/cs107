@@ -63,9 +63,10 @@ class Production {
    * Initializes a new Production to just encapsulate
    * a copy of the provided vector.
    */
-  
-  Production(const vector<string>& words) : phrases(words) {}
-  
+
+  Production(const vector<string>& words)
+      : phrases(words) {}
+
   /**
    * Iterators: begin, end
    * ---------------------
