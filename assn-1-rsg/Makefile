@@ -13,6 +13,7 @@ build: configure
 	cmake --build build
 	# pwsh -c "cp build/compile_commands.json .."
 	python gen_lsp.py
+	python reformat.py
 
 clean:
 	pwsh -c "rm -r $(BUILD_DIR)"

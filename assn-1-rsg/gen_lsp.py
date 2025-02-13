@@ -9,6 +9,8 @@ CURRENT = Path(__file__).resolve().parent
 commands = CURRENT.joinpath("build").joinpath("compile_commands.json")
 commands2 = commands.parent.joinpath(commands.stem)
 if commands.exists():
+    if commands2.exists():
+        commands2.unlink()
     commands.rename(commands2)
 commands = commands2
 
