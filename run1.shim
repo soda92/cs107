@@ -1,0 +1,2 @@
+path = "python.exe"
+args = "run1.py"
