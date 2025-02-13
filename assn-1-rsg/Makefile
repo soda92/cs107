@@ -6,11 +6,13 @@ BUILD_DIR ?= build
 all: build
 
 configure:
+	python gen_cmake.py
 	$(CMAKE) -B $(BUILD_DIR) -GNinja
 
 build: configure
 	cmake --build build
-	pwsh -c "cp build/compile_commands.json .."
+	# pwsh -c "cp build/compile_commands.json .."
+	python gen_lsp.py
 
 clean:
 	pwsh -c "rm -r $(BUILD_DIR)"
