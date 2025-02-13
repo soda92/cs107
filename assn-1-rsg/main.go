@@ -19,21 +19,11 @@ func get_output() string {
 	return goStr
 }
 
-func makeUI() (*widget.Label, *widget.Entry) {
-	out := widget.NewLabel(get_output())
-	in := widget.NewEntry()
-
-	in.OnChanged = func(content string) {
-		out.SetText("Hello " + content + "!")
-	}
-	return out, in
-}
-
 func main() {
 	a := app.New()
 	w := a.NewWindow("Assignment 1")
 	w.CenterOnScreen()
 
-	w.SetContent(container.NewVBox(makeUI()))
+	w.SetContent(container.NewVBox(widget.NewLabel(get_output())))
 	w.ShowAndRun()
 }

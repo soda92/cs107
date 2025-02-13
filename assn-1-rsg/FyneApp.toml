@@ -2,7 +2,6 @@ Website = "https://example.com"
 
 [Details]
   Icon = "cline.png"
-  Name = "assn-1-rsg"
+  Name = "assn-1-rsg-gui"
   ID = "com.example.app"
   Version = "1.0.0"
-  Build = 4
