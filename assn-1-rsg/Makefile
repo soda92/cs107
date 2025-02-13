@@ -14,7 +14,7 @@ build: configure
 	# pwsh -c "cp build/compile_commands.json .."
 	python gen_lsp.py
 	python reformat.py
-	go build .
+	fyne package
 
 clean:
 	pwsh -c "rm -r $(BUILD_DIR)"
