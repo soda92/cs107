@@ -6,17 +6,17 @@ package main
 // #include "main.h"
 import "C"
 import (
-	"unsafe"
 	"fyne.io/fyne/v2/app"
+	"unsafe"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
 func get_output() string {
-	cStr := C.rsg_main(C.CString("data/excuse.g"))
-	goStr := C.GoString(cStr)
-	C.free(unsafe.Pointer(cStr))
-	return goStr
+	c_str := C.rsg_main(C.CString("data/excuse.g"))
+	go_str := C.GoString(c_str)
+	C.free(unsafe.Pointer(c_str))
+	return go_str
 }
 
 func main() {
