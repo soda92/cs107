@@ -1,9 +1,10 @@
-#include <vector>
+#include <iomanip>
+#include <iostream>
 #include <list>
 #include <set>
 #include <string>
-#include <iostream>
-#include <iomanip>
+#include <vector>
+
 #include "imdb.h"
 #include "path.h"
 using namespace std;
@@ -33,7 +34,7 @@ static string promptForActor(const string& prompt, const imdb& db)
     vector<film> credits;
     if (db.getCredits(response, credits)) return response;
     cout << "We couldn't find \"" << response << "\" in the movie database. "
-	 << "Please try again." << endl;
+         << "Please try again." << endl;
   }
 }
 
@@ -60,7 +61,7 @@ int main(int argc, const char *argv[])
     cout << "Please check to make sure the source files exist and that you have permission to read them." << endl;
     exit(1);
   }
-  
+
   while (true) {
     string source = promptForActor("Actor or actress", db);
     if (source == "") break;
@@ -69,12 +70,13 @@ int main(int argc, const char *argv[])
     if (source == target) {
       cout << "Good one.  This is only interesting if you specify two different people." << endl;
     } else {
-      // replace the following line by a call to your generateShortestPath routine... 
-      cout << endl << "No path between those two people could be found." << endl << endl;
+      // replace the following line by a call to your generateShortestPath routine...
+      cout << endl
+           << "No path between those two people could be found." << endl
+           << endl;
     }
   }
-  
+
   cout << "Thanks for playing!" << endl;
   return 0;
 }
-

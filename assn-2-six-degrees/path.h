@@ -1,12 +1,13 @@
 #ifndef __path__
 #define __path__
 
-#include "imdb-utils.h"
 #include <vector>
+
+#include "imdb-utils.h"
 using namespace std;
 
 /**
- * Convenience Class: path 
+ * Convenience Class: path
  * -----------------------
  * The path class is a container class designed to
  * to store a sequence of actors/actresses and movies.
@@ -18,26 +19,25 @@ using namespace std;
  */
 
 class path {
-  
+
   /**
    * Overloaded operator<< function
    * ------------------------------
    * Function designed to format and publish an instance of
    * a path class.  Because the friend keyword is used, operator<<
-   * isn't a method, but instead a global function marked as a 'friend' 
+   * isn't a method, but instead a global function marked as a 'friend'
    * of the path.  While functions and methods normally respect
    * the privacy of a class, interacting with it via its public
    * interface, friends of a class are privileged and *can* directly
-   * access the private portions.  Friendship shouldn't be granted 
-   * all that often--typically, it's granted only to functions 
+   * access the private portions.  Friendship shouldn't be granted
+   * all that often--typically, it's granted only to functions
    * that are being implemented on behalf of the class.  operator<<
    * is one of those rare functions.
    */
 
   friend ostream& operator<<(ostream& os, const path& p);
-  
- public:
 
+ public:
   /**
    * Constructor: path
    * -----------------
@@ -58,7 +58,7 @@ class path {
    * @return the number of movies currently making up the
    *         path.
    */
-  
+
   int getLength() const { return links.size(); };
 
   /**
@@ -70,9 +70,9 @@ class path {
    * specified player really did appear in the movie, and it's
    * also the client's responsibility to ensure that the last
    * player prior to the addConnection message was also in the
-   * movie.  In theory, there is no limit to the number of 
+   * movie.  In theory, there is no limit to the number of
    * of movie-player connections that can be added.
-   * 
+   *
    * The implementation makes a deep copy of the specified movie and
    * actor, so you needn't worry about the memory management issues that
    * come up here.
@@ -81,7 +81,7 @@ class path {
    *              player and the last player in the path.
    * @param player a reference to the actor/actress appearing in the specified film.
    */
-  
+
   void addConnection(const film& movie, const string& player);
 
   /**
@@ -91,9 +91,9 @@ class path {
    * the length of the path (as defined by our getLength() method) is 0,
    * in which case nothing happens.
    */
-  
+
   void undoConnection();
-  
+
   /**
    * Method: getLastPlayer
    * ---------------------
@@ -103,7 +103,7 @@ class path {
    * @return the address of a string storing the name of the
    *         last player.
    */
-  
+
   const string& getLastPlayer() const;
 
   /**
@@ -113,21 +113,23 @@ class path {
    */
 
   void reverse();
-  
+
  private:
   // private struct definition... no one else uses it, so I define it internally
   // if you think about it, the existence of this struct is really an implementation detail,
   // so its very definition should be private, right?
 
-  struct connection {
+  struct connection
+  {
     film movie;
     string player;
-    
-    // convenience struct with constructors.. 
+
+    // convenience struct with constructors..
     connection() {}
-    connection(const film& movie, const string& player) : movie(movie), player(player) {}
+    connection(const film& movie, const string& player)
+        : movie(movie), player(player) {}
   };
-  
+
   string startPlayer;
   vector<connection> links;
 };

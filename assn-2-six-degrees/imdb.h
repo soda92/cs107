@@ -1,15 +1,15 @@
 #ifndef __imdb__
 #define __imdb__
 
-#include "imdb-utils.h"
 #include <string>
 #include <vector>
+
+#include "imdb-utils.h"
 using namespace std;
 
 class imdb {
-  
+
  public:
-  
   /**
    * Constructor: imdb
    * -----------------
@@ -40,7 +40,7 @@ class imdb {
   /**
    * Method: getCredits
    * ------------------
-   * Searches for an actor/actress's list of movie credits.  The list 
+   * Searches for an actor/actress's list of movie credits.  The list
    * of credits is returned via the second argument, which you'll note
    * is a non-const vector<film> reference.  If the specified actor/actress
    * isn't in the database, then the films vector will be left empty.
@@ -62,7 +62,7 @@ class imdb {
    * who star in it.  If the movie doesn't exist in the database, the players vector
    * is cleared and its size left at 0.
    *
-   * 
+   *
    * @param movie the film (title and year) being queried
    * @param players a reference to the vector of strings to be updated with the
    *                the list of actors and actresses starring in the specified film.
@@ -82,21 +82,22 @@ class imdb {
    */
 
   ~imdb();
-  
+
  private:
   static const char *const kActorFileName;
   static const char *const kMovieFileName;
   const void *actorFile;
   const void *movieFile;
-  
+
   // everything below here is complicated and needn't be touched.
   // you're free to investigate, but you're on your own.
-  struct fileInfo {
+  struct fileInfo
+  {
     int fd;
     size_t fileSize;
     const void *fileMap;
   } actorInfo, movieInfo;
-  
+
   static const void *acquireFileMap(const string& fileName, struct fileInfo& info);
   static void releaseFileMap(struct fileInfo& info);
 
