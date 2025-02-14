@@ -56,7 +56,8 @@
         "ostream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "mmap.h": "c"
     },
     "terminal.integrated.shellIntegration.decorationsEnabled": "gutter"
 }

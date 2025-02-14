@@ -1,11 +1,13 @@
-using namespace std;
 #include <sys/stat.h>
 #include <sys/types.h>
 // #include <sys/mman.h>
 #include <fcntl.h>
 #include <unistd.h>
 
+#include "mmap.h"
+
 #include "imdb.h"
+using namespace std;
 
 const char *const imdb::kActorFileName = "actordata";
 const char *const imdb::kMovieFileName = "moviedata";
@@ -39,6 +41,7 @@ imdb::~imdb()
 const void *imdb::acquireFileMap(const string& fileName, struct fileInfo& info)
 {
   struct stat stats;
+  cout << fileName << '\n';
   stat(fileName.c_str(), &stats);
   info.fileSize = stats.st_size;
   info.fd = open(fileName.c_str(), O_RDONLY);
