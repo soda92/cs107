@@ -13,6 +13,7 @@ extern "C" {
 
 #include <fstream>
 #include <map>
+#include <sstream>
 
 #include "definition.h"
 #include "production.h"
@@ -44,6 +45,13 @@ static void readGrammar(ifstream& infile, map<string, Definition>& grammar)
   }
 }
 
+char *get_cstr(string s)
+{
+  char *buffer = (char *)calloc(4096, sizeof(char));
+  memcpy(buffer, s.c_str(), s.size());
+  return buffer;
+}
+
 /**
  * Performs the rudimentary error checking needed to confirm that
  * the client provided a grammar file.  It then continues to
@@ -59,16 +67,25 @@ static void readGrammar(ifstream& infile, map<string, Definition>& grammar)
 char *rsg_main(char *file)
 {
   ifstream grammarFile(file);
-  char *buffer = (char *)calloc(256, sizeof(char));
+  string str;
+  stringstream s(str);
+
   if (grammarFile.fail()) {
     cerr << "Failed to open the file named \"" << file << "\".  Check to ensure the file exists. " << endl;
     // return 2; // each bad thing has its own bad return value
-    return buffer;
+    return get_cstr(str);
   }
 
   // things are looking good...
   map<string, Definition> grammar;
   readGrammar(grammarFile, grammar);
-  sprintf(buffer, "The grammar file called %s contains %d definitions.", file, grammar.size());
-  return buffer;
+  s << "The grammar file called : " << file << " contains " << grammar.size() << " definitions.";
+  for (auto i : grammar) {
+    for (auto j : i.second.getRandomProduction()) {
+      s << "\n"
+        << j;
+    };
+  }
+  s.flush();
+  return get_cstr(s.str());
 }

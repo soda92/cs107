@@ -4,10 +4,14 @@
         "*.gradle": "groovy",
         "*.json": "jsonc",
         "*.svelte": "svelte",
-        "CMakeLists.txt.template": "cmake",
+        "CML.template": "cmake",
         "map": "cpp",
         "vector": "cpp",
         "fstream": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "sstream": "cpp",
+        "*.tcc": "cpp",
+        "istream": "cpp",
+        "iosfwd": "cpp"
     }
 }

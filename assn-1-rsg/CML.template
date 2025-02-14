@@ -13,3 +13,4 @@ set(SOURCES
 )
 
 add_library(rsg ${SOURCES})
+target_include_directories(rsg PUBLIC .)
