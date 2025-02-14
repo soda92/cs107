@@ -13,10 +13,12 @@ build: configure
 	cmake --build build
 	python gen_lsp.py
 	python reformat.py
-	go build .
 
-run: all
-	./assn-1-rsg.exe
+run_a: all
+	./build/six-degrees.exe
+
+run_b: all
+	./build/imdb-test.exe
 
 package:
 	fyne package

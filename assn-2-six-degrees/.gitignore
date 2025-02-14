@@ -1,1 +1,11 @@
 /data
+*.o
+*.exe
+
+
+/build
+/.cache
+
+
+/CMakeLists.txt
+/fyne_metadata_init.go
