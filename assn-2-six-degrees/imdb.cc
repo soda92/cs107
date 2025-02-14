@@ -1,3 +1,4 @@
+using namespace std;
 #include <sys/stat.h>
 #include <sys/types.h>
 // #include <sys/mman.h>
@@ -5,7 +6,6 @@
 #include <unistd.h>
 
 #include "imdb.h"
-using namespace std;
 
 const char *const imdb::kActorFileName = "actordata";
 const char *const imdb::kMovieFileName = "moviedata";
@@ -21,7 +21,7 @@ imdb::imdb(const string& directory)
 
 bool imdb::good() const
 {
-  return !((actorInfo.fd == NULL) || (movieInfo.fd == NULL));
+  return !((actorInfo.fd == -1) || (movieInfo.fd == -1));
 }
 
 // you should be implementing these two methods right here...
@@ -41,17 +41,12 @@ const void *imdb::acquireFileMap(const string& fileName, struct fileInfo& info)
   struct stat stats;
   stat(fileName.c_str(), &stats);
   info.fileSize = stats.st_size;
-  info.fd = fopen(fileName.c_str(), O_RDONLY);
-  char *ptr = (char *)calloc(info.fileSize, sizeof(char));
-  fread(ptr, sizeof(char *), info.fileSize, info.fd);
-  return (void *)ptr;
+  info.fd = open(fileName.c_str(), O_RDONLY);
+  return info.fileMap = mmap(0, info.fileSize, PROT_READ, MAP_SHARED, info.fd, 0);
 }
 
 void imdb::releaseFileMap(struct fileInfo& info)
 {
-  if (info.fileMap != NULL) {
-    free((char *)info.fileMap);
-    info.fileMap = NULL;
-  }
-  if (info.fd != NULL) fclose(info.fd);
+  if (info.fileMap != NULL) munmap((char *)info.fileMap, info.fileSize);
+  if (info.fd != -1) close(info.fd);
 }
