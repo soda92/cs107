@@ -93,7 +93,7 @@ class imdb {
   // you're free to investigate, but you're on your own.
   struct fileInfo
   {
-    int fd;
+    FILE *fd;
     size_t fileSize;
     const void *fileMap;
   } actorInfo, movieInfo;
