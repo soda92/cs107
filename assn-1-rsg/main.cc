@@ -53,11 +53,7 @@ static void readGrammar(ifstream& infile, map<string, Definition>& grammar)
  * three randomly generated sentences, as illustrated by the sample
  * application.
  *
- * @param argc the number of tokens making up the command that invoked
- *             the RSG executable.  There must be at least two arguments,
- *             and only the first two are used.
- * @param argv the sequence of tokens making up the command, where each
- *             token is represented as a '\0'-terminated C string.
+ * @param file The grammar file
  */
 
 char *rsg_main(char *file)
@@ -73,6 +69,6 @@ char *rsg_main(char *file)
   // things are looking good...
   map<string, Definition> grammar;
   readGrammar(grammarFile, grammar);
-  sprintf(buffer, "The grammar file called %s contains %d definitions.\n", file, grammar.size());
+  sprintf(buffer, "The grammar file called %s contains %d definitions.", file, grammar.size());
   return buffer;
 }
