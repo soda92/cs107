@@ -52,6 +52,18 @@ char *get_cstr(string s)
   return buffer;
 }
 
+void get_prod(Definition d, stringstream& s, map<string, Definition> grammar)
+{
+  s << '\n';
+  for (auto j : d.getRandomProduction()) {
+    if (grammar.find(j) != grammar.end()) {
+      get_prod(grammar[j], s, grammar);
+    } else {
+      s << ' ' << j;
+    }
+  };
+}
+
 /**
  * Performs the rudimentary error checking needed to confirm that
  * the client provided a grammar file.  It then continues to
@@ -63,7 +75,6 @@ char *get_cstr(string s)
  *
  * @param file The grammar file
  */
-
 char *rsg_main(char *file)
 {
   ifstream grammarFile(file);
@@ -79,13 +90,7 @@ char *rsg_main(char *file)
   // things are looking good...
   map<string, Definition> grammar;
   readGrammar(grammarFile, grammar);
-  s << "The grammar file called : " << file << " contains " << grammar.size() << " definitions.";
-  for (auto i : grammar) {
-    for (auto j : i.second.getRandomProduction()) {
-      s << "\n"
-        << j;
-    };
-  }
-  s.flush();
+  // s << "The grammar file called : " << file << " contains " << grammar.size() << " definitions.\n";
+  get_prod(grammar["<start>"], s, grammar);
   return get_cstr(s.str());
 }
