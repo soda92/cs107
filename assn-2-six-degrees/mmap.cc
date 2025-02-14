@@ -104,7 +104,8 @@ void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t offset)
 }
 
 template <typename K, typename V>
-bool MAP_HAS1(const std::map<K, V>& map, const K& key) {
+bool MAP_HAS1(const std::map<K, V>& map, const K& key)
+{
   return map.find(key) != map.end();
 }
 

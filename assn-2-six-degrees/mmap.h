@@ -12,13 +12,14 @@
 #ifndef __mmap_h__
 #define __mmap_h__
 #include <cstddef>
+
 #include <_mingw_off_t.h>
 #define MAP_NOCACHE (0)
 #define MAP_NOEXTEND 0x0100 /* for MAP_FILE, don't change file size \
                              */
 #define MAP_FAILED ((void *)-1)
-#define O_RDONLY 0x0000
-#define O_RDWR 0x0002
+// #define O_RDONLY 0x0000
+// #define O_RDWR 0x0002
 
 #define PROT_READ 0x1 /* Page can be read. */
 #define PROT_WRITE 0x2 /* Page can be written. */
