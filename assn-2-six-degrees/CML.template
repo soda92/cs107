@@ -6,14 +6,18 @@ set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 
 include_directories(.)
+include_directories("{gcc}/include/c++/13.2.0")
+include_directories("{gcc}/include/c++/13.2.0/x86_64-w64-mingw32")
 
 add_executable(six-degrees
 "six-degrees.cc"
 "path.cc"
 "imdb.cc"
+"mmap.cc"
 )
 
 add_executable(imdb-test
 "imdb-test.cc"
 "imdb.cc"
+"mmap.cc"
 )

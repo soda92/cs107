@@ -4,9 +4,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "mmap.h"
-
 #include "imdb.h"
+#include "mmap.h"
 using namespace std;
 
 const char *const imdb::kActorFileName = "actordata";
