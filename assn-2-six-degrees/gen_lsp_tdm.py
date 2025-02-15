@@ -31,7 +31,7 @@ def str_(s):
 def get_gcc_path():
     # out = which("gcc.exe")
     # return out.resolve().parent.parent
-    return str_(r"C:\TDM-GCC-64")
+    return str_(r"C:\TDM-GCC-64\virtual")
 
 
 def get_includes():
