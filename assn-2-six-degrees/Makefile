@@ -11,7 +11,7 @@ configure:
 
 build: configure
 	cmake --build build
-	python gen_lsp.py
+	python gen_lsp_tdm.py
 	python reformat.py
 
 run_a: all

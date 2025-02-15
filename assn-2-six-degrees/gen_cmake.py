@@ -20,7 +20,7 @@ def get_gcc_path():
 
 
 if __name__ == "__main__":
-    template = CURRENT.joinpath("CML.template")
+    template = CURRENT.joinpath("CML_tdm.template")
     gcc_path = get_gcc_path()
     s = read_path(template)
     s = s.replace("{gcc}", str_path(gcc_path) + "/")

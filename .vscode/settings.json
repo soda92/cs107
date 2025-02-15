@@ -4,7 +4,7 @@
         "*.gradle": "groovy",
         "*.json": "jsonc",
         "*.svelte": "svelte",
-        "CML.template": "cmake",
+        "CML*.template": "cmake",
         "map": "cpp",
         "vector": "cpp",
         "fstream": "cpp",
