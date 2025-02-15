@@ -57,7 +57,9 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
-        "mmap.h": "c"
+        "mmap.h": "c",
+        ".clangd": "plaintext"
     },
-    "terminal.integrated.shellIntegration.decorationsEnabled": "gutter"
+    "terminal.integrated.shellIntegration.decorationsEnabled": "gutter",
+    "C_Cpp.intelliSenseEngine": "disabled"
 }
