@@ -10,4 +10,4 @@ for file in files:
     with CD(CURRENT.parent):
         import subprocess
 
-        subprocess.run(["clang-format", CURRENT.name + "/" + file, "-i"])
+        subprocess.run(["C:/src/llvm-project-install/bin/clang-format", CURRENT.name + "/" + file, "-i"])

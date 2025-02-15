@@ -58,7 +58,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "mmap.h": "c",
-        ".clangd": "plaintext"
+        ".clangd*": "plaintext"
     },
     "terminal.integrated.shellIntegration.decorationsEnabled": "gutter",
     "C_Cpp.intelliSenseEngine": "disabled"
