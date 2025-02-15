@@ -28,5 +28,9 @@ def write_virtual(f):
 
     vfile.parent.mkdir(parents=True, exist_ok=True)
 
-    c = fix_content(read_path(f))
-    write_path(vfile, c)
+    try:
+        c = fix_content(read_path(f))
+        write_path(vfile, c)
+    except UnicodeDecodeError:
+        return
+

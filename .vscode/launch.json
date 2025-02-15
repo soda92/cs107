@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "genlsp",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/gen_lsp_for_gcc/main.py",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "imdb-test",
             "type": "cppdbg",
             "request": "launch",

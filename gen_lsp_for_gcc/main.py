@@ -6,7 +6,7 @@ from sodatools import write_path, str_path
 CURRENT = Path(__file__).resolve().parent
 sys.path.insert(0, str_path(CURRENT))
 
-tdm_dir = r"c:\TDM-GCC-64"
+tdm_dir = r"c:/TDM-GCC-64"
 tdm_dir_v = r"c:/TDM-GCC-64/virtual"
 db = Path(tdm_dir_v).joinpath("compile_commands.json")
 
@@ -33,7 +33,8 @@ write_path(Path(dummy_cc), "")
 for i in dirs:
     i = i.replace("\\", "/")
     i = i.replace("{gcc}", tdm_dir + "/")
-    files = Path(i).glob("*")
+    from file_list import get_file_list
+    files = get_file_list(i)
 
     for f in files:
         # if f.name == "iostream":
