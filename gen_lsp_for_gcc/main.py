@@ -41,13 +41,13 @@ for i in dirs:
         #     print(f)
         from fix_mingw import write_virtual
         write_virtual(f)
-        obj = {
-            "directory": tdm_dir_v,
-            "command": f"C:/TDM-GCC-64/bin/g++.exe {includes} {dummy_cc}",
-            "file": dummy_cc,
-            "output": str_path(Path(tdm_dir_v).joinpath("a.obj")),
-        }
-        objs.append(obj)
+    obj = {
+        "directory": tdm_dir_v,
+        "command": f"C:/TDM-GCC-64/bin/g++.exe {includes} {dummy_cc}",
+        "file": dummy_cc,
+        "output": str_path(Path(tdm_dir_v).joinpath("a.obj")),
+    }
+    objs.append(obj)
 
 
 s = json.dumps(objs, indent=2)
