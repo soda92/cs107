@@ -35,6 +35,8 @@ if __name__ == "__main__":
         s = read_path(template)
         if args.tdm:
             s = s.replace("g++", "C:/TDM-GCC-64/bin/g++.exe")
+            s = s.replace("gcc", "C:/TDM-GCC-64/bin/gcc.exe")
         else:
             s = s.replace("g++", which("g++"))
+            s = s.replace("gcc", which("gcc"))
         write_path(target, s)
