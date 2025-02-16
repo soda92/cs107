@@ -2,7 +2,14 @@
 
 <https://see.stanford.edu/Course/CS107>
 
-- 1: <https://see.stanford.edu/materials/icsppcs107/04-Assignment-1-RSG.pdf>
+1. <https://see.stanford.edu/materials/icsppcs107/04-Assignment-1-RSG.pdf>
+1. [Assignment 2][a2]
+    1. [FAQ][faq2]
+
+
+[faq2]: https://see.stanford.edu/materials/icsppcs107/09b-Assignment-2-Six-Degrees-FAQs.pdf
+[a2]: https://see.stanford.edu/materials/icsppcs107/09-Assignment-2-Six-Degrees.pdf
+
 
 
 # about GO

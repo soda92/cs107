@@ -1,5 +1,32 @@
 {
     "recommendations": [
+        // language servers
         "decodetalkers.neocmakelsp-vscode",
+        "golang.go",
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "llvm-vs-code-extensions.vscode-clangd",
+        // theme
+        "GitHub.github-vscode-theme",
+        // debuggers
+        "vadimcn.vscode-lldb",
+    ],
+    "unwantedRecommendations": [
+        // not usable
+        "llvm-vs-code-extensions.lldb-dap",
+        // requires Visual Studio
+        "ms-vscode.cpptools",
+        // closed source
+        "ms-python.vscode-pylance",
+
+        // ... others
+        "github.copilot",
+        "github.copilot-chat",
+        "ms-azuretools.vscode-azure-github-copilot",
+        "github.copilot-workspace",
+        "github.vscode-pull-request-github",
+        "theqtcompany.qt-qml",
+        "theqtcompany.qt-core",
+        "felgo.felgo",
     ]
 }

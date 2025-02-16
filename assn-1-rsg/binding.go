@@ -1,6 +1,6 @@
 package main
 
-// #cgo LDFLAGS: -Lbuild -lrsg -lstdc++
+// #cgo LDFLAGS: -Lbuild -lrsg
 // #include <string.h>
 // #include <stdlib.h>
 // #include "main.h"

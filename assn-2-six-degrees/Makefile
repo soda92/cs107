@@ -12,10 +12,12 @@ configure:
 
 build: configure
 	cmake --build --preset windows2
-	CC=C:/TDM-GCC-64/bin/gcc.exe CXX=C:/TDM-GCC-64/bin/g++.exe go build .
 
-run: all
-	./assn-1-rsg.exe
+run_a: all
+	./build/six-degrees.exe
+
+run_b: all
+	./build/imdb-test.exe
 
 package:
 	fyne package
