@@ -10,4 +10,4 @@ if __name__ == "__main__":
     for file in files:
         file = str_path(file)
         with CD(CURRENT.parent):
-            subprocess.run(["clang-format.exe", file, "-i"])
+            subprocess.run(["C:/src/llvm-project-install/bin/clang-format.exe", file, "-i"])
