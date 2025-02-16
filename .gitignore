@@ -1,7 +1,12 @@
-/__cmake*
-/*.json
-/.cache
+/__cmake*/
+build/
+.cache/
+__pycache__/
 
+
+fyne_metadata_init.go
+*.o
 *.exe
 
-__pycache__
+CMakeUserPresets.json
+/compile_*.json
