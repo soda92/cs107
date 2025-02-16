@@ -1,10 +1,9 @@
 from pathlib import Path
 import os
-from sodatools import read_path, write_path, str_path
+from sodatools import read_path, write_path, str_path, get_glob_files
 import argparse
 import sys
 import logging
-import glob
 
 
 CURRENT = Path(__file__).resolve().parent
@@ -12,26 +11,18 @@ sys.path.insert(0, str_path(CURRENT))
 
 
 def get_cmake_templates() -> list[Path]:
-    files = list(glob.glob("**/CML.template", recursive=True))
-    ret = []
-    for f in files:
-        fp = CURRENT.joinpath(f)
-        ret.append(fp)
-    return ret
+    return get_glob_files("**/CML.template")
 
 
-def which(name) -> str:
+def which(name) -> Path:
+    "find executable by name from PATH"
     path = os.environ["PATH"]
     for p in path.split(";"):
         exe = Path(p).joinpath(name)
         if exe.exists():
             return exe
     logging.fatal(f"{name} not found in PATH")
-
-
-def get_gcc_root() -> Path:
-    out = which("gcc.exe")
-    return out.resolve().parent.parent
+    exit(-1)
 
 
 if __name__ == "__main__":
