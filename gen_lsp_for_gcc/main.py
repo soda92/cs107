@@ -1,7 +1,43 @@
 import sys
-from pathlib import Path
 import json
-from sodatools import write_path, str_path
+import glob
+
+from pathlib import Path
+from sodatools import write_path, str_path, read_path
+
+
+def get_file_list(i: str):
+    lis = list(glob.glob("**/*", recursive=True, root_dir=i))
+    ret = []
+    for p in lis:
+        ret.append(Path(i).joinpath(p))
+    # print(i)
+    return ret
+
+
+def fix_content(c):
+    c = c.replace("__MINGW_ATTRIB_NORETURN", "")
+    c = c.replace("__MINGW_NOTHROW", "")
+    return c
+
+
+def write_virtual(f):
+    if f.is_dir():
+        return
+    global cnt
+    base = Path(r"c:\TDM-GCC-64")
+    virtual = Path(r"c:\TDM-GCC-64\virtual")
+    rel = Path(f).relative_to(base)
+    vfile = virtual.joinpath(rel)
+
+    vfile.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        c = fix_content(read_path(f))
+        write_path(vfile, c)
+    except UnicodeDecodeError:
+        return
+
 
 CURRENT = Path(__file__).resolve().parent
 sys.path.insert(0, str_path(CURRENT))
@@ -33,14 +69,11 @@ write_path(Path(dummy_cc), "")
 for i in dirs:
     i = i.replace("\\", "/")
     i = i.replace("{gcc}", tdm_dir + "/")
-    from file_list import get_file_list
     files = get_file_list(i)
 
     for f in files:
-        # if f.name == "iostream":
-        #     print(f)
-        from fix_mingw import write_virtual
         write_virtual(f)
+
     obj = {
         "directory": tdm_dir_v,
         "command": f"C:/TDM-GCC-64/bin/g++.exe {includes} {dummy_cc}",
