@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.22)
 
 project(assn1)
 
-set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 
 set(SOURCES

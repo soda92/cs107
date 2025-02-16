@@ -6,14 +6,13 @@ BUILD_DIR ?= build
 all: build
 
 configure:
-	python gen_cmake.py
-	$(CMAKE) -B $(BUILD_DIR) -GNinja
+	python ../gen_cmake.py
+	python ../reformat.py
+	cmake --preset windows2
 
 build: configure
-	cmake --build build
-	python gen_lsp.py
-	python reformat.py
-	go build .
+	cmake --build --preset windows2
+	CC=C:/TDM-GCC-64/bin/gcc.exe CXX=C:/TDM-GCC-64/bin/g++.exe go build .
 
 run: all
 	./assn-1-rsg.exe

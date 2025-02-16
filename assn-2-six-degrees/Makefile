@@ -6,10 +6,12 @@ BUILD_DIR ?= build
 all: build
 
 configure:
-	$(CMAKE) -B $(BUILD_DIR) -GNinja
+	python ../gen_cmake.py
+	python ../reformat.py
+	cmake --preset windows2
 
 build: configure
-	cmake --build build
+	cmake --build --preset windows2
 
 run_a: all
 	./build/six-degrees.exe
