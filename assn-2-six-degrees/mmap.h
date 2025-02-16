@@ -14,7 +14,10 @@
 #define __mmap_h__
 #include <cstddef>
 
-#include <_mingw_off_t.h>
+// #include <_mingw_off_t.h>
+typedef long off32_t;
+typedef off32_t off_t;
+
 #define MAP_NOCACHE (0)
 #define MAP_NOEXTEND 0x0100 /* for MAP_FILE, don't change file size \
                              */
