@@ -4,6 +4,7 @@
 #include <set>
 #include <string>
 
+#include "header.h"
 #include "imdb.h"
 using namespace std;
 
@@ -205,7 +206,7 @@ static void queryForActors(const imdb& db)
  * that the imdb constructor is called,
  */
 
-int main(int argc, char **argv)
+int imdb_test_main(int argc, char **argv)
 {
   imdb db(determinePathToData());
   if (!db.good()) {
