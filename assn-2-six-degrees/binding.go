@@ -1,4 +1,4 @@
 package main
 
-// #include "header.h"
+// #include <stdio.h>
 import "C"
