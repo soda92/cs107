@@ -1,4 +1,6 @@
-// go:build ignore
+// clang-format off
+//go:build ignore
+// clang-format on
 #include <iomanip> // for setw formatter
 #include <iostream>
 #include <map>
