@@ -1,3 +1,4 @@
+// go:build ignore
 #ifndef __imdb__
 #define __imdb__
 

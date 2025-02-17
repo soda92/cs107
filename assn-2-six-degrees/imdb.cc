@@ -1,3 +1,4 @@
+// go:build ignore
 #include <sys/stat.h>
 #include <sys/types.h>
 // #include <sys/mman.h>

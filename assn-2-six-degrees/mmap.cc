@@ -1,3 +1,4 @@
+// go:build ignore
 #include "mmap.h"
 
 #include <Windows.h>

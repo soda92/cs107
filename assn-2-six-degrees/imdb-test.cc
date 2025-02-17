@@ -1,3 +1,4 @@
+// go:build ignore
 #include <iomanip> // for setw formatter
 #include <iostream>
 #include <map>

@@ -1,3 +1,4 @@
+// go:build ignore
 #include <iomanip>
 #include <iostream>
 #include <list>
