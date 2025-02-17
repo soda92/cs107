@@ -7,6 +7,7 @@ __pycache__/
 fyne_metadata_init.go
 *.o
 *.exe
+*.exe~
 
 CMakeUserPresets.json
 /compile_*.json

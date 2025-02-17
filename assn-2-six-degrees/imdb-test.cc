@@ -202,7 +202,7 @@ static void queryForActors(const imdb& db)
 }
 
 /**
- * Function: main
+ * Function: imdb_test_main
  * --------------
  * Defines the entry point for the unit testing
  * program that exercises the imdb class.  Notice

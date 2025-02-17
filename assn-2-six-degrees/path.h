@@ -1,4 +1,3 @@
-// go:build ignore
 #ifndef __path__
 #define __path__
 
