@@ -10,6 +10,8 @@
         "GitHub.github-vscode-theme",
         // debuggers
         "vadimcn.vscode-lldb",
+        // cpp bookmarks
+        "tommyme.bookmarkx",
     ],
     "unwantedRecommendations": [
         // not usable
@@ -18,7 +20,6 @@
         "ms-vscode.cpptools",
         // closed source
         "ms-python.vscode-pylance",
-
         // ... others
         "github.copilot",
         "github.copilot-chat",

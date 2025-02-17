@@ -1,4 +1,4 @@
 package main
 
 // #include <stdio.h>
-import "C"
+// import "C"
