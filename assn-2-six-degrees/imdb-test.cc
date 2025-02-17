@@ -1,9 +1,13 @@
+// clang-format off
+//go:build ignore
+// clang-format on
 #include <iomanip> // for setw formatter
 #include <iostream>
 #include <map>
 #include <set>
 #include <string>
 
+#include "header.h"
 #include "imdb.h"
 using namespace std;
 
@@ -198,14 +202,14 @@ static void queryForActors(const imdb& db)
 }
 
 /**
- * Function: main
+ * Function: imdb_test_main
  * --------------
  * Defines the entry point for the unit testing
  * program that exercises the imdb class.  Notice
  * that the imdb constructor is called,
  */
 
-int main(int argc, char **argv)
+int imdb_test_main(int argc, char **argv)
 {
   imdb db(determinePathToData());
   if (!db.good()) {

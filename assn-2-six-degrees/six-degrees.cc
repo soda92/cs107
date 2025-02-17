@@ -1,3 +1,6 @@
+// clang-format off
+//go:build ignore
+// clang-format on
 #include <iomanip>
 #include <iostream>
 #include <list>
@@ -5,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "header.h"
 #include "imdb.h"
 #include "path.h"
 using namespace std;
@@ -53,7 +57,7 @@ static string promptForActor(const string& prompt, const imdb& db)
  * @return 0 if the program ends normally, and undefined otherwise.
  */
 
-int main(int argc, const char *argv[])
+int six_dg_main(int argc, const char *argv[])
 {
   imdb db(determinePathToData(argv[1])); // inlined in imdb-utils.h
   if (!db.good()) {

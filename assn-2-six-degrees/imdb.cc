@@ -1,3 +1,6 @@
+// clang-format off
+//go:build ignore
+// clang-format on
 #include <sys/stat.h>
 #include <sys/types.h>
 // #include <sys/mman.h>
@@ -40,7 +43,7 @@ imdb::~imdb()
 const void *imdb::acquireFileMap(const string& fileName, struct fileInfo& info)
 {
   struct stat stats;
-  cout << fileName << '\n';
+  // cout << fileName << '\n';
   stat(fileName.c_str(), &stats);
   info.fileSize = stats.st_size;
   info.fd = open(fileName.c_str(), O_RDONLY);

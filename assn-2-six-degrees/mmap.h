@@ -1,10 +1,11 @@
-// https://groups.google.com/g/c-rtmp-server/c/FeuKrpOlg5A/m/rwAhJRvzdiMJ
-// Simonr's profile photo
-// Simonr
-// unread,
-// Aug 18, 2010, 7:18:44 PM
-// to C++ RTMP Server
-// Hi,
+// go:build ignore
+//  https://groups.google.com/g/c-rtmp-server/c/FeuKrpOlg5A/m/rwAhJRvzdiMJ
+//  Simonr's profile photo
+//  Simonr
+//  unread,
+//  Aug 18, 2010, 7:18:44 PM
+//  to C++ RTMP Server
+//  Hi,
 
 // If anybodies interested... I have implemented MMAP for the windows
 // code:

@@ -12,10 +12,12 @@ add_executable(six-degrees
 "path.cc"
 "imdb.cc"
 "mmap.cc"
+"build/six_degree_main.cc"
 )
 
 add_executable(imdb-test
 "imdb-test.cc"
 "imdb.cc"
 "mmap.cc"
+"build/imdb_test_main.cc"
 )
