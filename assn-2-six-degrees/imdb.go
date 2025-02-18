@@ -1,17 +1,13 @@
 package main
 
 import (
-	"github.com/edsrzf/mmap-go"
 	"os"
-	"unsafe"
 )
 
 type fileInfo struct {
-	fd       *os.File
-	map_     mmap.MMap
-	fileSize uint64
-	fileMap  unsafe.Pointer
-	err      any
+	fd      *os.File
+	fileMap MMap
+	err     any
 }
 
 var actorInfo fileInfo
@@ -109,11 +105,11 @@ func (t *imdb) Close() {
 func acquireFileMap(fileName string, info *fileInfo) *byte {
 	info.fd, info.err = os.Open(fileName)
 	x, ret := mmap_(info.fd)
-	info.map_ = x
+	info.fileMap = x
 	return ret
 }
 
 func releaseFileMap(info *fileInfo) {
-	info.map_.Unmap()
+	unmap_(info.fileMap)
 	info.fd.Close()
 }
