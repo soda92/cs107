@@ -91,7 +91,13 @@ func listCostars(player string, credits []film, db imdb) {}
  *           good test.
  */
 func listAllMoviesAndCostars(player string, db *imdb) {
-
+	credits, ret := db.getCredits(&player)
+	if !ret {
+		fmt.Printf("We're sorry, but %s doesn't appear to be in our database.\nPerhaps someone else?\n", player)
+		return
+	}
+	listMovies(player, credits)
+	listCostars(player, credits, *db)
 }
 
 /**
