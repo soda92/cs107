@@ -23,17 +23,15 @@ func promptForActor(prompt string, db *imdb) string {
 	var response string
 	for {
 		fmt.Printf("%s [or <enter> to quit]: ", prompt)
-		_, err := fmt.Scanln("%s", &response)
-		if err != nil {
-			if response == "" {
-				return ""
-			}
-			var credits []film
-			if db.getCredits(&response, credits) {
-				return response
-			}
-			fmt.Printf("We coun't find %s in the movie database. Please try again.\n", response)
+		response = readline()
+		if response == "" {
+			return ""
 		}
+		_, ret := db.getCredits(&response)
+		if ret {
+			return response
+		}
+		fmt.Printf("We coun't find %s in the movie database. Please try again.\n", response)
 	}
 }
 

@@ -2,10 +2,11 @@ package main
 
 import "fmt"
 
-func stall() {
+func stall() string {
 	var dummy string
 	fmt.Printf("[Press enter to continue]")
-	fmt.Scanln("", &dummy)
+	dummy = readline()
+	return dummy
 }
 
 func printFill() {
@@ -111,8 +112,7 @@ func listAllMoviesAndCostars(player string, db *imdb) {
 func queryForActors(db *imdb) {
 	for {
 		fmt.Print("Please enter the name of an actor or actress (or [enter] to quit): ")
-		var response string
-		fmt.Scanln(&response)
+		response := readline()
 		if response == "" {
 			return
 		}
