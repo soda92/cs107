@@ -58,8 +58,9 @@ func NewImdb(directory string) *imdb {
  * @return true if and only if the specified actor/actress appeared in the
  *              database, and false otherwise.
  */
-func (t *imdb) getCredits(r *string, f []film) bool {
-	return false
+func (t *imdb) getCredits(r *string) ([]film, bool) {
+	var ret []film
+	return ret, false
 }
 
 /**
@@ -73,7 +74,7 @@ func (t *imdb) getCredits(r *string, f []film) bool {
  *     3.) the directory and files all exist, but you don't have the permission to read them.
  */
 func (t *imdb) good() bool {
-	return actorInfo.err != nil
+	return actorInfo.err == nil
 }
 
 /**
