@@ -1,19 +1,25 @@
 package main
 
-import "unsafe"
+import (
+	"github.com/edsrzf/mmap-go"
+	"os"
+	"unsafe"
+)
 
 type fileInfo struct {
-	fd       int
+	fd       *os.File
+	map_     mmap.MMap
 	fileSize uint64
 	fileMap  unsafe.Pointer
+	err      any
 }
 
 var actorInfo fileInfo
 var movieInfo fileInfo
 
 type imdb struct {
-	actorFile unsafe.Pointer
-	movieFile unsafe.Pointer
+	actorFile *byte
+	movieFile *byte
 
 	kActorFileName string
 	kMovieFileName string
@@ -71,7 +77,7 @@ func (t *imdb) getCredits(r *string, f []film) bool {
  *     3.) the directory and files all exist, but you don't have the permission to read them.
  */
 func (t *imdb) good() bool {
-	return !((actorInfo.fd == -1) || movieInfo.fd == -1)
+	return actorInfo.err != nil
 }
 
 /**
@@ -100,12 +106,14 @@ func (t *imdb) Close() {
 	releaseFileMap(&movieInfo)
 }
 
-func acquireFileMap(fileName string, info *fileInfo) unsafe.Pointer {
-	// TODO
-	return nil
+func acquireFileMap(fileName string, info *fileInfo) *byte {
+	info.fd, info.err = os.Open(fileName)
+	x, ret := mmap_(info.fd)
+	info.map_ = x
+	return ret
 }
 
-func releaseFileMap(info *fileInfo) unsafe.Pointer {
-	// TODO
-	return nil
+func releaseFileMap(info *fileInfo) {
+	info.map_.Unmap()
+	info.fd.Close()
 }
