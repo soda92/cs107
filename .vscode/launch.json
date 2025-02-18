@@ -5,6 +5,29 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "imdb test",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/assn-2-six-degrees",
+            "args": [
+                "-cmd",
+                "-test"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "imdb main",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/assn-2-six-degrees",
+            "args": [
+                "-cmd",
+                "-main"
+            ]
+        },
+        {
             "type": "lldb",
             "request": "launch",
             "name": "Launch",

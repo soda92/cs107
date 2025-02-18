@@ -8,6 +8,7 @@ import (
 
 	"log"
 
+	"flag"
 	"fyne.io/fyne/v2/layout"
 	"github.com/fyne-io/terminal"
 )
@@ -18,16 +19,29 @@ func RunCommand(t *terminal.Terminal, command string) {
 }
 
 func main() {
+	cmd := flag.Bool("cmd", false, "whether run cmd version")
+	test := flag.Bool("test", false, "run test")
+	dg_main := flag.Bool("main", false, "run six degrees")
+
+	flag.Parse()
+
+	if *cmd {
+		if *test {
+			imdb_test_main()
+		}
+		if *dg_main {
+			six_dg_main(nil)
+		}
+		return
+	}
+
 	a := app.New()
 	a.Settings().SetTheme(NewMyTheme())
 	w := a.NewWindow("Six Degrees")
 
-	// 	w.SetContent(widget.NewLabel("main"))
-
 	w.Resize(fyne.NewSize(800, 500))
 	w.CenterOnScreen()
-	// 	// w.ShowAndRun()
-	// // run new terminal and close app on terminal exit.
+
 	t := terminal.New()
 	t.SetStartDir(".")
 	t.Resize(fyne.NewSize(800, 400))
@@ -48,7 +62,15 @@ func main() {
 	button3 := widget.NewButton("build", func() {
 		RunCommand(t, "make")
 	})
-	c2 := container.New(layout.NewHBoxLayout(), button, button2, button3)
+
+	go_cmd_imdb_test := widget.NewButton("go-imdb-test", func() {
+		imdb_test_main()
+	})
+
+	go_cmd_six_degrees := widget.NewButton("go-six-degrees", func() {
+		six_dg_main(nil)
+	})
+	c2 := container.New(layout.NewHBoxLayout(), button, button2, button3, go_cmd_imdb_test, go_cmd_six_degrees)
 
 	c := container.NewBorder(nil, c2, nil, nil, t)
 	w.SetContent(c)
