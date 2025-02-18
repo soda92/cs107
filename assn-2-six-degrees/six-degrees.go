@@ -32,7 +32,7 @@ func promptForActor(prompt string, db *imdb) string {
 			if db.getCredits(&response, credits) {
 				return response
 			}
-			fmt.Println("We coun't find %s in the movie database. Please try again.", response)
+			fmt.Printf("We coun't find %s in the movie database. Please try again.\n", response)
 		}
 	}
 }

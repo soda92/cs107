@@ -48,7 +48,15 @@ func main() {
 	button3 := widget.NewButton("build", func() {
 		RunCommand(t, "make")
 	})
-	c2 := container.New(layout.NewHBoxLayout(), button, button2, button3)
+
+	go_cmd_imdb_test := widget.NewButton("go-imdb-test", func() {
+		imdb_test_main()
+	})
+
+	go_cmd_six_degrees := widget.NewButton("go-six-degrees", func() {
+		six_dg_main(nil)
+	})
+	c2 := container.New(layout.NewHBoxLayout(), button, button2, button3, go_cmd_imdb_test, go_cmd_six_degrees)
 
 	c := container.NewBorder(nil, c2, nil, nil, t)
 	w.SetContent(c)

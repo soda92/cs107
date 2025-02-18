@@ -32,8 +32,8 @@ func (p *path) print() {
 	fmt.Print("\t%s was in", p.startPlayer)
 
 	for i := 0; i < len(p.links); i++ {
-		fmt.Println(
-			"\"%s\" (%s) with %s.",
+		fmt.Printf(
+			"\"%s\" (%s) with %s.\n",
 			p.links[i].movie.title, p.links[i].movie.year, p.links[i].player)
 		if i+1 == len(p.links) {
 			break
