@@ -107,6 +107,22 @@ func (db *imdb) getFilms(movieIndexes []int32) []film {
 	return films
 }
 
+func (db *imdb) BinarySearch(player string, start int, end int) (int, bool) {
+	if start == end {
+		return 0, false
+	}
+	middle := start + (end-start)/2
+	name, _ := db.DecodeActor(middle)
+	if name == player {
+		return middle, true
+	}
+	if name > player {
+		return db.BinarySearch(player, start, middle)
+	} else {
+		return db.BinarySearch(player, middle+1, end)
+	}
+}
+
 /**
  * Method: getCredits
  * ------------------
@@ -122,12 +138,19 @@ func (db *imdb) getFilms(movieIndexes []int32) []film {
  *              database, and false otherwise.
  */
 func (db *imdb) getCredits(r *string) ([]film, bool) {
+	// *r = "Karoha Langwane"
 	var num int32
-	reader := bytes.NewReader(db.actorFile)
-	binary.Read(reader, binary.NativeEndian, &num)
-	fmt.Println(num)
-	name1, movieIndexes := db.DecodeActor(1)
-	fmt.Println(name1)
+	binary.Decode(db.actorFile[num:num+4], binary.LittleEndian, &num)
+
+	index, found := db.BinarySearch(*r, 1, 1+int(num))
+	if !found {
+		var ret []film
+		return ret, false
+	}
+
+	_, movieIndexes := db.DecodeActor(index)
+
+	// fmt.Println(name)
 
 	films := db.getFilms(movieIndexes)
 	return films, true

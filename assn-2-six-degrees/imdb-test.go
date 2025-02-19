@@ -36,7 +36,7 @@ func listMovies(player string, credits []film) {
 	fmt.Printf("%s has starred in %d films.\n", player, len(credits))
 	fmt.Println("These films are:")
 
-	numMovies := 0
+	numMovies := 1
 
 	for _, curr := range credits {
 		if numMovies >= kNumFilesToPrint {
@@ -47,8 +47,14 @@ func listMovies(player string, credits []film) {
 		numMovies += 1
 	}
 
-	if len(credits) > kNumFilesToPrint {
+	if len(credits) > 2*kNumFilesToPrint {
 		printFill()
+	}
+	numMovies = len(credits) - kNumFilesToPrint + 1
+	for _, curr := range credits[len(credits)-kNumFilesToPrint:] {
+		movie := curr
+		fmt.Printf("     %d.) %s (%d)\n", numMovies, movie.title, movie.year)
+		numMovies += 1
 	}
 	stall()
 }
