@@ -75,7 +75,66 @@ func listMovies(player string, credits []film) {
  *           so that each member of each cast of each movie can be added to the specified player's
  *           set of costars.
  */
-func listCostars(player string, credits []film, db imdb) {}
+func listCostars(player string, credits []film, db imdb) {
+	kNumCoStarsToPrint := 10
+	var costars map[string][]film
+	for i, _ := range credits {
+		movie := credits[i]
+		cast, _ := db.getCast(movie)
+
+		for j, _ := range cast {
+			costar := cast[j]
+			if costar != player {
+				costars[costar] = append(costars[costar], movie)
+			}
+		}
+	}
+
+	fmt.Printf("%s has worked with %d other people.\n")
+	fmt.Println("Those other people are:")
+
+	numCostars := 0
+	startindex := 0
+	for costar, films := range costars {
+		fmt.Print("     %d.) %s", numCostars, costar)
+		numCostars += 1
+		if len(films) > 1 {
+			fmt.Printf(" (in %d different films)", len(films))
+		}
+		fmt.Println()
+		startindex += 1
+	}
+
+	if startindex < len(costars) {
+		if len(costars) > 2*kNumCoStarsToPrint {
+			printFill()
+		}
+		for {
+			if numCostars >= len(costars)-kNumCoStarsToPrint {
+				break
+			}
+			numCostars += 1
+			startindex += 1
+		}
+
+		i := 0
+		for costar, films := range costars {
+			if i < startindex {
+				i += 1
+				continue
+			}
+			i += 1
+
+			fmt.Print("     %d.) %s", numCostars, costar)
+			if len(films) > 1 {
+				fmt.Printf(" (in %d different films)", len(films))
+			}
+			fmt.Println()
+		}
+	}
+
+	stall()
+}
 
 /**
  * Function: listAllMoviesAndCostars

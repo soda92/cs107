@@ -187,8 +187,9 @@ func (t *imdb) good() bool {
  * @return true if and only if the specified movie appeared in the
  *              database, and false otherwise.
  */
-func (t *imdb) getCast(movie film, players *[]string) bool {
-	return false
+func (t *imdb) getCast(movie film) ([]string, bool) {
+	var ret []string
+	return ret, false
 }
 
 func (t *imdb) Close() {
