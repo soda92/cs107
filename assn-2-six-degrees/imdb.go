@@ -84,6 +84,29 @@ func (db *imdb) DecodeActor(index int) (string, []int32) {
 	return name1, movieIndexes
 }
 
+func (db *imdb) getFilms(movieIndexes []int32) []film {
+	numMovies := len(movieIndexes)
+	films := make([]film, numMovies)
+	for i := 0; i < int(numMovies); i++ {
+		index := movieIndexes[i]
+		movieRecord := db.movieFile[index:]
+		lenTitle := 0
+		for {
+			if movieRecord[lenTitle] != 0x00 {
+				lenTitle += 1
+			} else {
+				break
+			}
+		}
+		movieName := string(movieRecord[:lenTitle])
+		year := int(movieRecord[lenTitle+1]) // single byte here
+
+		films[i].title = movieName
+		films[i].year = year + 1900
+	}
+	return films
+}
+
 /**
  * Method: getCredits
  * ------------------
@@ -104,27 +127,9 @@ func (db *imdb) getCredits(r *string) ([]film, bool) {
 	binary.Read(reader, binary.NativeEndian, &num)
 	fmt.Println(num)
 	name1, movieIndexes := db.DecodeActor(1)
-	numMovies := len(movieIndexes)
 	fmt.Println(name1)
 
-	films := make([]film, numMovies)
-	for i := 0; i < int(numMovies); i++ {
-		index := movieIndexes[i]
-		movieRecord := db.movieFile[index:]
-		lenTitle := 0
-		for {
-			if movieRecord[lenTitle] != 0x00 {
-				lenTitle += 1
-			} else {
-				break
-			}
-		}
-		movieName := string(movieRecord[:lenTitle])
-		year := int(movieRecord[lenTitle+1]) // single byte here
-
-		films[i].title = movieName
-		films[i].year = year + 1900
-	}
+	films := db.getFilms(movieIndexes)
 	return films, true
 }
 
