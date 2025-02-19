@@ -2,8 +2,6 @@
 #include <unistd.h>
 
 #include "cs107thread.h"
-#include "pthread.h"
-#include "semaphore.h"
 
 sem_t sem;
 
