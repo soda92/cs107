@@ -1,7 +1,11 @@
 package main
 
 import (
+	"bytes"
+	"encoding/binary"
+	"fmt"
 	"os"
+	"strings"
 )
 
 type fileInfo struct {
@@ -14,8 +18,8 @@ var actorInfo fileInfo
 var movieInfo fileInfo
 
 type imdb struct {
-	actorFile *byte
-	movieFile *byte
+	actorFile []byte
+	movieFile []byte
 
 	kActorFileName string
 	kMovieFileName string
@@ -44,6 +48,81 @@ func NewImdb(directory string) *imdb {
 	return &db
 }
 
+func (db *imdb) DecodeActor(index int) (string, []int32) {
+	index = index * 4
+	var firstAddr int32
+	binary.Decode(db.actorFile[index:index+4], binary.LittleEndian, &firstAddr)
+	var nextAddr int32
+	binary.Decode(db.actorFile[index+4:index+8], binary.LittleEndian, &nextAddr)
+
+	name := string(db.actorFile[firstAddr:nextAddr])
+	len1 := strings.IndexByte(name, 0x00)
+	totalLen := len1
+	name1 := name[:len1]
+	rest := name[len1:]
+	if len(name1)%2 != 0 {
+		rest = rest[1:]
+		totalLen += 1
+	}
+
+	reader2 := bytes.NewReader([]byte(rest))
+	var numMovies int16
+	binary.Read(reader2, binary.NativeEndian, &numMovies)
+
+	totalLen += 2
+	if totalLen%4 != 0 {
+		// we already know it's a multiple of 2, so we just pad 2 bytes to get to a 4-align
+		reader2.Seek(2, 1) // 1: io.SeekCurrent
+		totalLen += 2
+	}
+
+	movieIndexes := make([]int32, numMovies)
+	for i := 0; i < int(numMovies); i++ {
+		binary.Read(reader2, binary.NativeEndian, &movieIndexes[i])
+	}
+	// fmt.Println(name1)
+	return name1, movieIndexes
+}
+
+func (db *imdb) getFilms(movieIndexes []int32) []film {
+	numMovies := len(movieIndexes)
+	films := make([]film, numMovies)
+	for i := 0; i < int(numMovies); i++ {
+		index := movieIndexes[i]
+		movieRecord := db.movieFile[index:]
+		lenTitle := 0
+		for {
+			if movieRecord[lenTitle] != 0x00 {
+				lenTitle += 1
+			} else {
+				break
+			}
+		}
+		movieName := string(movieRecord[:lenTitle])
+		year := int(movieRecord[lenTitle+1]) // single byte here
+
+		films[i].title = movieName
+		films[i].year = year + 1900
+	}
+	return films
+}
+
+func (db *imdb) BinarySearch(player string, start int, end int) (int, bool) {
+	if start == end {
+		return 0, false
+	}
+	middle := start + (end-start)/2
+	name, _ := db.DecodeActor(middle)
+	if name == player {
+		return middle, true
+	}
+	if name > player {
+		return db.BinarySearch(player, start, middle)
+	} else {
+		return db.BinarySearch(player, middle+1, end)
+	}
+}
+
 /**
  * Method: getCredits
  * ------------------
@@ -58,9 +137,23 @@ func NewImdb(directory string) *imdb {
  * @return true if and only if the specified actor/actress appeared in the
  *              database, and false otherwise.
  */
-func (t *imdb) getCredits(r *string) ([]film, bool) {
-	var ret []film
-	return ret, false
+func (db *imdb) getCredits(r *string) ([]film, bool) {
+	// *r = "Karoha Langwane"
+	var num int32
+	binary.Decode(db.actorFile[num:num+4], binary.LittleEndian, &num)
+
+	index, found := db.BinarySearch(*r, 1, 1+int(num))
+	if !found {
+		var ret []film
+		return ret, false
+	}
+
+	_, movieIndexes := db.DecodeActor(index)
+
+	// fmt.Println(name)
+
+	films := db.getFilms(movieIndexes)
+	return films, true
 }
 
 /**
@@ -94,8 +187,9 @@ func (t *imdb) good() bool {
  * @return true if and only if the specified movie appeared in the
  *              database, and false otherwise.
  */
-func (t *imdb) getCast(movie film, players *[]string) bool {
-	return false
+func (t *imdb) getCast(movie film) ([]string, bool) {
+	var ret []string
+	return ret, false
 }
 
 func (t *imdb) Close() {
@@ -103,7 +197,7 @@ func (t *imdb) Close() {
 	releaseFileMap(&movieInfo)
 }
 
-func acquireFileMap(fileName string, info *fileInfo) *byte {
+func acquireFileMap(fileName string, info *fileInfo) []byte {
 	info.fd, info.err = os.Open(fileName)
 	x, ret := mmap_(info.fd)
 	info.fileMap = x

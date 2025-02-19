@@ -12,7 +12,8 @@
             "program": "${workspaceFolder}/assn-2-six-degrees",
             "args": [
                 "-cmd",
-                "-test"
+                "-test",
+                "-name=asdf",
             ],
             "console": "integratedTerminal"
         },

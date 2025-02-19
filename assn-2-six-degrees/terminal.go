@@ -22,12 +22,13 @@ func main() {
 	cmd := flag.Bool("cmd", false, "whether run cmd version")
 	test := flag.Bool("test", false, "run test")
 	dg_main := flag.Bool("main", false, "run six degrees")
+	name := flag.String("name", "nil", "query name")
 
 	flag.Parse()
 
 	if *cmd {
 		if *test {
-			imdb_test_main()
+			imdb_test_main(*name)
 		}
 		if *dg_main {
 			six_dg_main(nil)
@@ -64,7 +65,7 @@ func main() {
 	})
 
 	go_cmd_imdb_test := widget.NewButton("go-imdb-test", func() {
-		imdb_test_main()
+		imdb_test_main("nil")
 	})
 
 	go_cmd_six_degrees := widget.NewButton("go-six-degrees", func() {
