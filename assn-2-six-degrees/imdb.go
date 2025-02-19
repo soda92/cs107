@@ -1,7 +1,11 @@
 package main
 
 import (
+	"bytes"
+	"encoding/binary"
+	"fmt"
 	"os"
+	"strings"
 )
 
 type fileInfo struct {
@@ -14,8 +18,8 @@ var actorInfo fileInfo
 var movieInfo fileInfo
 
 type imdb struct {
-	actorFile *byte
-	movieFile *byte
+	actorFile []byte
+	movieFile []byte
 
 	kActorFileName string
 	kMovieFileName string
@@ -58,9 +62,62 @@ func NewImdb(directory string) *imdb {
  * @return true if and only if the specified actor/actress appeared in the
  *              database, and false otherwise.
  */
-func (t *imdb) getCredits(r *string) ([]film, bool) {
-	var ret []film
-	return ret, false
+func (db *imdb) getCredits(r *string) ([]film, bool) {
+	var num int32
+	reader := bytes.NewReader(db.actorFile)
+	binary.Read(reader, binary.NativeEndian, &num)
+	fmt.Println(num)
+	var firstAddr int32
+	binary.Read(reader, binary.NativeEndian, &firstAddr)
+	var nextAddr int32
+	binary.Read(reader, binary.NativeEndian, &nextAddr)
+
+	name := string(db.actorFile[firstAddr:nextAddr])
+	len1 := strings.IndexByte(name, 0x00)
+	totalLen := len1
+	name1 := name[:len1]
+	rest := name[len1:]
+	if len(name1)%2 != 0 {
+		rest = rest[1:]
+		totalLen += 1
+	}
+
+	reader2 := bytes.NewReader([]byte(rest))
+	var numMovies int16
+	binary.Read(reader2, binary.NativeEndian, &numMovies)
+
+	totalLen += 2
+	if totalLen%4 != 0 {
+		// we already know it's a multiple of 2, so we just pad 2 bytes to get to a 4-align
+		reader2.Seek(2, 1) // 1: io.SeekCurrent
+		totalLen += 2
+	}
+
+	movieIndexes := make([]int32, numMovies)
+	for i := 0; i < int(numMovies); i++ {
+		binary.Read(reader2, binary.NativeEndian, &movieIndexes[i])
+	}
+	fmt.Println(name1)
+
+	films := make([]film, numMovies)
+	for i := 0; i < int(numMovies); i++ {
+		index := movieIndexes[i]
+		movieRecord := db.movieFile[index:]
+		lenTitle := 0
+		for {
+			if movieRecord[lenTitle] != 0x00 {
+				lenTitle += 1
+			} else {
+				break
+			}
+		}
+		movieName := string(movieRecord[:lenTitle])
+		year := int(movieRecord[lenTitle+1]) // single byte here
+
+		films[i].title = movieName
+		films[i].year = year + 1900
+	}
+	return films, true
 }
 
 /**
@@ -103,7 +160,7 @@ func (t *imdb) Close() {
 	releaseFileMap(&movieInfo)
 }
 
-func acquireFileMap(fileName string, info *fileInfo) *byte {
+func acquireFileMap(fileName string, info *fileInfo) []byte {
 	info.fd, info.err = os.Open(fileName)
 	x, ret := mmap_(info.fd)
 	info.fileMap = x
