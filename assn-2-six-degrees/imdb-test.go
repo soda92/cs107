@@ -133,11 +133,14 @@ func queryForActors(db *imdb) {
  * program that exercises the imdb class.  Notice
  * that the imdb constructor is called,
  */
-func imdb_test_main() int {
+func imdb_test_main(name string) int {
 	db := NewImdb(determinePathToData(nil))
 	if !db.good() {
 		fmt.Println("Data directory not found!  Aborting...")
 		return 1
+	}
+	if name != "nil" {
+		listAllMoviesAndCostars(name, db)
 	}
 	queryForActors(db)
 	return 0

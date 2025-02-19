@@ -9,12 +9,12 @@ import (
 
 type MMap = mmap.MMap
 
-func mmap_(f *os.File) (mmap.MMap, *byte) {
+func mmap_(f *os.File) (mmap.MMap, []byte) {
 	m, err := mmap.Map(f, mmap.RDONLY, 0)
 	if err != nil {
 		log.Fatal("error mapping file")
 	}
-	return m, &m[0]
+	return m, m
 }
 
 func unmap_(m mmap.MMap) {
