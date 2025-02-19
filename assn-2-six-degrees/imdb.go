@@ -48,29 +48,12 @@ func NewImdb(directory string) *imdb {
 	return &db
 }
 
-/**
- * Method: getCredits
- * ------------------
- * Searches for an actor/actress's list of movie credits.  The list
- * of credits is returned via the second argument, which you'll note
- * is a non-const vector<film> reference.  If the specified actor/actress
- * isn't in the database, then the films vector will be left empty.
- *
- * @param player the name of the actor or actresses being queried.
- * @param films a reference to the vector of films that should be updated
- *              with the list of the specified actor/actress's credits.
- * @return true if and only if the specified actor/actress appeared in the
- *              database, and false otherwise.
- */
-func (db *imdb) getCredits(r *string) ([]film, bool) {
-	var num int32
-	reader := bytes.NewReader(db.actorFile)
-	binary.Read(reader, binary.NativeEndian, &num)
-	fmt.Println(num)
+func (db *imdb) DecodeActor(index int) (string, []int32) {
+	index = index * 4
 	var firstAddr int32
-	binary.Read(reader, binary.NativeEndian, &firstAddr)
+	binary.Decode(db.actorFile[index:index+4], binary.LittleEndian, &firstAddr)
 	var nextAddr int32
-	binary.Read(reader, binary.NativeEndian, &nextAddr)
+	binary.Decode(db.actorFile[index+4:index+8], binary.LittleEndian, &nextAddr)
 
 	name := string(db.actorFile[firstAddr:nextAddr])
 	len1 := strings.IndexByte(name, 0x00)
@@ -97,6 +80,31 @@ func (db *imdb) getCredits(r *string) ([]film, bool) {
 	for i := 0; i < int(numMovies); i++ {
 		binary.Read(reader2, binary.NativeEndian, &movieIndexes[i])
 	}
+	// fmt.Println(name1)
+	return name1, movieIndexes
+}
+
+/**
+ * Method: getCredits
+ * ------------------
+ * Searches for an actor/actress's list of movie credits.  The list
+ * of credits is returned via the second argument, which you'll note
+ * is a non-const vector<film> reference.  If the specified actor/actress
+ * isn't in the database, then the films vector will be left empty.
+ *
+ * @param player the name of the actor or actresses being queried.
+ * @param films a reference to the vector of films that should be updated
+ *              with the list of the specified actor/actress's credits.
+ * @return true if and only if the specified actor/actress appeared in the
+ *              database, and false otherwise.
+ */
+func (db *imdb) getCredits(r *string) ([]film, bool) {
+	var num int32
+	reader := bytes.NewReader(db.actorFile)
+	binary.Read(reader, binary.NativeEndian, &num)
+	fmt.Println(num)
+	name1, movieIndexes := db.DecodeActor(1)
+	numMovies := len(movieIndexes)
 	fmt.Println(name1)
 
 	films := make([]film, numMovies)
