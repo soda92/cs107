@@ -24,5 +24,9 @@ run_b: all
 package:
 	fyne package
 
+go:
+	go fmt .
+	go build .
+
 clean:
 	pwsh -c "rm -r $(BUILD_DIR)"

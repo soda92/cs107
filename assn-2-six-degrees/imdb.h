@@ -51,7 +51,6 @@ class imdb {
    * @return true if and only if the specified actor/actress appeared in the
    *              database, and false otherwise.
    */
-
   bool getCredits(const string& player, vector<film>& films) const;
 
   /**
