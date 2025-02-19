@@ -13,6 +13,7 @@ void *print_message(void *ptr)
   printf("%s \n", message);
   sem_post(&sem);
   pthread_exit(NULL);
+  return NULL;
 }
 
 int main()
@@ -20,8 +21,8 @@ int main()
 
   sem_init(&sem, 0, 0);
   pthread_t thread1, thread2;
-  char *message1 = "Thread 1";
-  char *message2 = "Thread 2";
+  const char *message1 = "Thread 1";
+  const char *message2 = "Thread 2";
   int ret1, ret2;
 
   // Create thread 1
