@@ -55,7 +55,7 @@
  * for inclusion by <unistd.h>, in those cases (e.g. MinGW) where
  * <unistd.h> is provided.
  */
-#define _POSIX_SEMAPHORES
+// #define _POSIX_SEMAPHORES
 
 /* Internal macros, common to the public interfaces for various
  * pthreads-win32 components, are defined in <_ptw32.h>; we must
