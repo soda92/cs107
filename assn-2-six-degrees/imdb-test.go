@@ -80,7 +80,9 @@ func listMovies(player string, credits []film) {
  */
 func listCostars(player string, credits []film, db imdb) {
 	kNumCoStarsToPrint := 10
-	costars := make(map[string][]film)
+
+	costars2 := make(map[string]set)
+	costars0 := make(map[string][]film)
 	for i := range credits {
 		movie := credits[i]
 		cast, _ := db.getCast(movie)
@@ -88,9 +90,18 @@ func listCostars(player string, credits []film, db imdb) {
 		for j := range cast {
 			costar := cast[j]
 			if costar != player {
-				costars[costar] = append(costars[costar], movie)
+				if costars2[costar] == nil {
+					costars2[costar] = make(set)
+				}
+				costars2[costar] = addSet(costars2[costar], movie)
+				costars0[costar] = append(costars0[costar], movie)
 			}
 		}
+	}
+
+	costars := convertCoStars(costars2)
+	if !MapEqual(costars, costars0) {
+		fmt.Print("")
 	}
 
 	fmt.Printf("%s has worked with %d other people.\n", player, len(costars))
@@ -100,18 +111,21 @@ func listCostars(player string, credits []film, db imdb) {
 	fmt.Println("Those other people are:")
 
 	numCostars := 0
-	startindex := 0
+	curr := 0
 	for costar, films := range costars {
-		fmt.Printf("     %d.) %s", numCostars, costar)
+		fmt.Printf("     %d.) %s", numCostars+1, costar)
 		numCostars += 1
 		if len(films) > 1 {
 			fmt.Printf(" (in %d different films)", len(films))
 		}
 		fmt.Println()
-		startindex += 1
+		curr += 1
+		if curr > kNumCoStarsToPrint {
+			break
+		}
 	}
 
-	if startindex < len(costars) {
+	if curr < len(costars) {
 		if len(costars) > 2*kNumCoStarsToPrint {
 			printFill()
 		}
@@ -120,22 +134,22 @@ func listCostars(player string, credits []film, db imdb) {
 				break
 			}
 			numCostars += 1
-			startindex += 1
+			curr += 1
 		}
 
 		i := 0
 		for costar, films := range costars {
-			if i < startindex {
+			if i < curr {
 				i += 1
 				continue
 			}
-			i += 1
 
-			fmt.Printf("     %d.) %s", numCostars, costar)
+			fmt.Printf("     %d.) %s", i+1, costar)
 			if len(films) > 1 {
 				fmt.Printf(" (in %d different films)", len(films))
 			}
 			fmt.Println()
+			i += 1
 		}
 	}
 
