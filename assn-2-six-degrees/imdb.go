@@ -1,11 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"encoding/binary"
-	"fmt"
 	"os"
-	"strings"
 )
 
 type fileInfo struct {
@@ -48,42 +45,6 @@ func NewImdb(directory string) *imdb {
 	return &db
 }
 
-func (db *imdb) DecodeActor(index int) (string, []int32) {
-	index = index * 4
-	var firstAddr int32
-	binary.Decode(db.actorFile[index:index+4], binary.LittleEndian, &firstAddr)
-	var nextAddr int32
-	binary.Decode(db.actorFile[index+4:index+8], binary.LittleEndian, &nextAddr)
-
-	name := string(db.actorFile[firstAddr:nextAddr])
-	len1 := strings.IndexByte(name, 0x00)
-	totalLen := len1
-	name1 := name[:len1]
-	rest := name[len1:]
-	if len(name1)%2 != 0 {
-		rest = rest[1:]
-		totalLen += 1
-	}
-
-	reader2 := bytes.NewReader([]byte(rest))
-	var numMovies int16
-	binary.Read(reader2, binary.NativeEndian, &numMovies)
-
-	totalLen += 2
-	if totalLen%4 != 0 {
-		// we already know it's a multiple of 2, so we just pad 2 bytes to get to a 4-align
-		reader2.Seek(2, 1) // 1: io.SeekCurrent
-		totalLen += 2
-	}
-
-	movieIndexes := make([]int32, numMovies)
-	for i := 0; i < int(numMovies); i++ {
-		binary.Read(reader2, binary.NativeEndian, &movieIndexes[i])
-	}
-	// fmt.Println(name1)
-	return name1, movieIndexes
-}
-
 func (db *imdb) getFilms(movieIndexes []int32) []film {
 	numMovies := len(movieIndexes)
 	films := make([]film, numMovies)
@@ -105,65 +66,6 @@ func (db *imdb) getFilms(movieIndexes []int32) []film {
 		films[i].year = year + 1900
 	}
 	return films
-}
-
-func (db *imdb) BinarySearch(player string, start, end int) (int, bool) {
-	if start == end {
-		return 0, false
-	}
-	middle := start + (end-start)/2
-	name, _ := db.DecodeActor(middle)
-	if name == player {
-		return middle, true
-	}
-	if name > player {
-		return db.BinarySearch(player, start, middle)
-	} else {
-		return db.BinarySearch(player, middle+1, end)
-	}
-}
-
-func (db *imdb) DecodeMovie(index int) film {
-	var ret film
-	return ret
-}
-
-func (db *imdb) getCastFromMovie(index int) []string {
-	var ret []string
-	return ret
-}
-
-func MovieEqual(movie1, movie2 film) bool {
-	return ((movie1.title == movie2.title) && movie1.year == movie2.year)
-}
-
-func MovieGreater(movie1, movie2 film) bool {
-	if movie1.title > movie2.title {
-		return true
-	} else if movie1.title < movie2.title {
-		return false
-	}
-	// proceed only if movie1.title == movie2.title
-	if movie1.year > movie2.year {
-		return true
-	}
-	return false
-}
-
-func (db *imdb) BinarySearchMovie(movie film, start, end int) (int, bool) {
-	if start == end {
-		return 0, false
-	}
-	middle := start + (end-start)/2
-	movie_ := db.DecodeMovie(middle)
-	if MovieEqual(movie_, movie) {
-		return middle, true
-	}
-	if MovieGreater(movie_, movie) {
-		return db.BinarySearchMovie(movie, start, middle)
-	} else {
-		return db.BinarySearchMovie(movie, middle+1, end)
-	}
 }
 
 /**
