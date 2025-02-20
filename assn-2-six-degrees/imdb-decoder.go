@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"log"
 	"strings"
+	"io"
 )
 
 func (db *imdb) DecodeActor(index int) (string, []int32) {
@@ -14,7 +15,7 @@ func (db *imdb) DecodeActor(index int) (string, []int32) {
 	var nextAddr int32
 	binary.Decode(db.actorFile[index+4:index+8], binary.LittleEndian, &nextAddr)
 
-	if firstAddr <= nextAddr {
+	if firstAddr >= nextAddr {
 		log.Fatal("index error")
 	}
 
@@ -35,7 +36,7 @@ func (db *imdb) DecodeActor(index int) (string, []int32) {
 	totalLen += 2
 	if totalLen%4 != 0 {
 		// we already know it's a multiple of 2, so we just pad 2 bytes to get to a 4-align
-		reader2.Seek(2, 1) // 1: io.SeekCurrent
+		reader2.Seek(2, io.SeekCurrent)
 		totalLen += 2
 	}
 
@@ -53,39 +54,21 @@ func (db *imdb) DecodeMovie(index int) film {
 	binary.Decode(db.movieFile[index:index+4], binary.LittleEndian, &firstAddr)
 	var nextAddr int32
 	binary.Decode(db.movieFile[index+4:index+8], binary.LittleEndian, &nextAddr)
-	if firstAddr <= nextAddr {
+	if firstAddr >= nextAddr {
 		log.Fatal("index error")
 	}
 
 	name := string(db.movieFile[firstAddr:nextAddr])
 	len1 := strings.IndexByte(name, 0x00)
-	totalLen := len1
 	name1 := name[:len1]
-	rest := name[len1:]
-	if len(name1)%2 != 0 {
-		rest = rest[1:]
-		totalLen += 1
-	}
-
-	reader2 := bytes.NewReader([]byte(rest))
-	var numMovies int16
-	binary.Read(reader2, binary.NativeEndian, &numMovies)
-
-	totalLen += 2
-	if totalLen%4 != 0 {
-		// we already know it's a multiple of 2, so we just pad 2 bytes to get to a 4-align
-		reader2.Seek(2, 1) // 1: io.SeekCurrent
-		totalLen += 2
-	}
-
-	movieIndexes := make([]int32, numMovies)
-	for i := 0; i < int(numMovies); i++ {
-		binary.Read(reader2, binary.NativeEndian, &movieIndexes[i])
-	}
-	// fmt.Println(name1)
-	// return name1, movieIndexes
-	var ret film
-	return ret
+	rest := name[len1+1:]
+	// totalLen := len1+1
+	year := int(rest[0])
+	year += 1900
+	var movie film
+	movie.title = name1
+	movie.year = year
+	return movie
 }
 
 func (db *imdb) getCastFromMovie(index int) []string {
