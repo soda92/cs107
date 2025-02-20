@@ -64,6 +64,7 @@ func (db *imdb) getFilms(movieIndexes []int32) []film {
 
 		films[i].title = movieName
 		films[i].year = year + 1900
+		films[i].indexInMovieFile = int(index)
 	}
 	return films
 }

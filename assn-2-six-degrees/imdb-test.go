@@ -34,6 +34,9 @@ func listMovies(player string, credits []film) {
 	kNumFilesToPrint := 10
 
 	fmt.Printf("%s has starred in %d films.\n", player, len(credits))
+	if len(credits) == 0 {
+		return
+	}
 	fmt.Println("These films are:")
 
 	numMovies := 1
@@ -91,6 +94,9 @@ func listCostars(player string, credits []film, db imdb) {
 	}
 
 	fmt.Printf("%s has worked with %d other people.\n", player, len(costars))
+	if len(costars) == 0 {
+		return
+	}
 	fmt.Println("Those other people are:")
 
 	numCostars := 0

@@ -3,23 +3,15 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
+	"io"
 	"log"
 	"strings"
-	"io"
 )
 
 func (db *imdb) DecodeActor(index int) (string, []int32) {
-	index = index * 4
-	var firstAddr int32
-	binary.Decode(db.actorFile[index:index+4], binary.LittleEndian, &firstAddr)
-	var nextAddr int32
-	binary.Decode(db.actorFile[index+4:index+8], binary.LittleEndian, &nextAddr)
 
-	if firstAddr >= nextAddr {
-		log.Fatal("index error")
-	}
 
-	name := string(db.actorFile[firstAddr:nextAddr])
+	name := GetRecord(db.actorFile, index)
 	len1 := strings.IndexByte(name, 0x00)
 	totalLen := len1
 	name1 := name[:len1]
@@ -48,17 +40,22 @@ func (db *imdb) DecodeActor(index int) (string, []int32) {
 	return name1, movieIndexes
 }
 
-func (db *imdb) DecodeMovie(index int) film {
+func GetRecord(db []byte, index int) string {
 	index = index * 4
 	var firstAddr int32
-	binary.Decode(db.movieFile[index:index+4], binary.LittleEndian, &firstAddr)
+	binary.Decode(db[index:index+4], binary.LittleEndian, &firstAddr)
 	var nextAddr int32
-	binary.Decode(db.movieFile[index+4:index+8], binary.LittleEndian, &nextAddr)
+	binary.Decode(db[index+4:index+8], binary.LittleEndian, &nextAddr)
 	if firstAddr >= nextAddr {
 		log.Fatal("index error")
 	}
 
-	name := string(db.movieFile[firstAddr:nextAddr])
+	record := string(db[firstAddr:nextAddr])
+	return record
+}
+
+func (db *imdb) DecodeMovie(index int) film {
+	name := GetRecord(db.movieFile, index)
 	len1 := strings.IndexByte(name, 0x00)
 	name1 := name[:len1]
 	rest := name[len1+1:]
