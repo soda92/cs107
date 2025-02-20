@@ -5,15 +5,24 @@ import (
 	"encoding/binary"
 	"io"
 	"log"
-	"strings"
 )
 
-func (db *imdb) DecodeActor(index int) (string, []int32) {
-	name := GetRecord(db.actorFile, index)
-	len1 := strings.IndexByte(name, 0x00)
+func IndexOf(data []byte, val byte) int {
+	for i, v := range data {
+		if data[i] == v {
+			return i
+		}
+	}
+	log.Fatal("index error")
+	return -1
+}
+
+func (db *imdb) DecodeActorRecord(record []byte) (string, []int32) {
+	// name := GetRecord(db.actorFile, index)
+	len1 := IndexOf(record, 0x00)
 	totalLen := len1
-	name1 := name[:len1]
-	rest := name[len1:]
+	name1 := record[:len1]
+	rest := record[len1:]
 	if len(name1)%2 != 0 {
 		rest = rest[1:]
 		totalLen += 1
@@ -35,33 +44,41 @@ func (db *imdb) DecodeActor(index int) (string, []int32) {
 		binary.Read(reader2, binary.NativeEndian, &offsets[i])
 	}
 	// fmt.Println(name1)
-	return name1, offsets
+	return string(name1), offsets
 }
 
-func GetRecord(db []byte, index int) string {
-	index = index * 4
-	var firstAddr int32
-	binary.Decode(db[index:index+4], binary.LittleEndian, &firstAddr)
-	var nextAddr int32
-	binary.Decode(db[index+4:index+8], binary.LittleEndian, &nextAddr)
-	if firstAddr >= nextAddr {
-		log.Fatal("index error")
-	}
+func (db *imdb) DecodeActor(index int) (string, []int32) {
+	record := GetRecordFromOffset(db.actorFile, GetOffsetByIndex(db.actorFile, index))
+	return db.DecodeActorRecord(record)
+}
 
-	record := string(db[firstAddr:nextAddr])
-	return record
+func (db *imdb) DecodeActorFromOffset(offset int) (string, []int32) {
+	record := GetRecordFromOffset(db.actorFile, offset)
+	return db.DecodeActorRecord(record)
+}
+
+func GetRecord(db []byte, index int) []byte {
+	index = index * 4 // the index was already plus-ed 1
+	var offset int32
+	binary.Decode(db[index:index+4], binary.LittleEndian, &offset)
+
+	return GetRecordFromOffset(db, int(offset))
+}
+
+func GetRecordFromOffset(db []byte, offset int) []byte {
+	return db[offset:]
 }
 
 func (db *imdb) DecodeMovie(index int) film {
 	name := GetRecord(db.movieFile, index)
-	len1 := strings.IndexByte(name, 0x00)
+	len1 := IndexOf(name, 0x00)
 	name1 := name[:len1]
 	rest := name[len1+1:]
 	// totalLen := len1+1
 	year := int(rest[0])
 	year += 1900
 	var movie film
-	movie.title = name1
+	movie.title = string(name1)
 	movie.year = year
 	return movie
 }
