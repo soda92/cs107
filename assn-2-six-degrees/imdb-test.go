@@ -5,7 +5,7 @@ import "fmt"
 func stall() string {
 	var dummy string
 	fmt.Printf("[Press enter to continue]")
-	dummy = readline()
+	// dummy = readline()
 	return dummy
 }
 
