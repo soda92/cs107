@@ -78,11 +78,11 @@ func listMovies(player string, credits []film) {
 func listCostars(player string, credits []film, db imdb) {
 	kNumCoStarsToPrint := 10
 	costars := make(map[string][]film)
-	for i, _ := range credits {
+	for i := range credits {
 		movie := credits[i]
 		cast, _ := db.getCast(movie)
 
-		for j, _ := range cast {
+		for j := range cast {
 			costar := cast[j]
 			if costar != player {
 				costars[costar] = append(costars[costar], movie)
@@ -90,13 +90,13 @@ func listCostars(player string, credits []film, db imdb) {
 		}
 	}
 
-	fmt.Printf("%s has worked with %d other people.\n")
+	fmt.Printf("%s has worked with %d other people.\n", player, len(costars))
 	fmt.Println("Those other people are:")
 
 	numCostars := 0
 	startindex := 0
 	for costar, films := range costars {
-		fmt.Print("     %d.) %s", numCostars, costar)
+		fmt.Printf("     %d.) %s", numCostars, costar)
 		numCostars += 1
 		if len(films) > 1 {
 			fmt.Printf(" (in %d different films)", len(films))
@@ -125,7 +125,7 @@ func listCostars(player string, credits []film, db imdb) {
 			}
 			i += 1
 
-			fmt.Print("     %d.) %s", numCostars, costar)
+			fmt.Printf("     %d.) %s", numCostars, costar)
 			if len(films) > 1 {
 				fmt.Printf(" (in %d different films)", len(films))
 			}

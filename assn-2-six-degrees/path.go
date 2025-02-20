@@ -29,16 +29,16 @@ func (p *path) print() {
 		return
 	}
 
-	fmt.Print("\t%s was in", p.startPlayer)
+	fmt.Printf("\t%s was in", p.startPlayer)
 
 	for i := 0; i < len(p.links); i++ {
 		fmt.Printf(
-			"\"%s\" (%s) with %s.\n",
+			"\"%s\" (%d) with %s.\n",
 			p.links[i].movie.title, p.links[i].movie.year, p.links[i].player)
 		if i+1 == len(p.links) {
 			break
 		}
-		fmt.Print("\t%s was in ", p.links[i].player)
+		fmt.Printf("\t%s was in ", p.links[i].player)
 	}
 }
 
