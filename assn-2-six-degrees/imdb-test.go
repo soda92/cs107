@@ -77,7 +77,7 @@ func listMovies(player string, credits []film) {
  */
 func listCostars(player string, credits []film, db imdb) {
 	kNumCoStarsToPrint := 10
-	var costars map[string][]film
+	costars := make(map[string][]film)
 	for i, _ := range credits {
 		movie := credits[i]
 		cast, _ := db.getCast(movie)

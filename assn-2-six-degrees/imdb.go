@@ -107,7 +107,7 @@ func (db *imdb) getFilms(movieIndexes []int32) []film {
 	return films
 }
 
-func (db *imdb) BinarySearch(player string, start int, end int) (int, bool) {
+func (db *imdb) BinarySearch(player string, start, end int) (int, bool) {
 	if start == end {
 		return 0, false
 	}
@@ -120,6 +120,49 @@ func (db *imdb) BinarySearch(player string, start int, end int) (int, bool) {
 		return db.BinarySearch(player, start, middle)
 	} else {
 		return db.BinarySearch(player, middle+1, end)
+	}
+}
+
+func (db *imdb) DecodeMovie(index int) film {
+	var ret film
+	return ret
+}
+
+func (db *imdb) getCastFromMovie(index int) []string {
+	var ret []string
+	return ret
+}
+
+func MovieEqual(movie1, movie2 film) bool {
+	return ((movie1.title == movie2.title) && movie1.year == movie2.year)
+}
+
+func MovieGreater(movie1, movie2 film) bool {
+	if movie1.title > movie2.title {
+		return true
+	} else if movie1.title < movie2.title {
+		return false
+	}
+	// proceed only if movie1.title == movie2.title
+	if movie1.year > movie2.year {
+		return true
+	}
+	return false
+}
+
+func (db *imdb) BinarySearchMovie(movie film, start, end int) (int, bool) {
+	if start == end {
+		return 0, false
+	}
+	middle := start + (end-start)/2
+	movie_ := db.DecodeMovie(middle)
+	if MovieEqual(movie_, movie) {
+		return middle, true
+	}
+	if MovieGreater(movie_, movie) {
+		return db.BinarySearchMovie(movie, start, middle)
+	} else {
+		return db.BinarySearchMovie(movie, middle+1, end)
 	}
 }
 
@@ -187,9 +230,18 @@ func (t *imdb) good() bool {
  * @return true if and only if the specified movie appeared in the
  *              database, and false otherwise.
  */
-func (t *imdb) getCast(movie film) ([]string, bool) {
-	var ret []string
-	return ret, false
+func (db *imdb) getCast(movie film) ([]string, bool) {
+	var num int32
+	binary.Decode(db.movieFile[num:num+4], binary.LittleEndian, &num)
+
+	index, found := db.BinarySearchMovie(movie, 1, 1+int(num))
+	if !found {
+		var ret []string
+		return ret, false
+	}
+
+	casts := db.getCastFromMovie(index)
+	return casts, true
 }
 
 func (t *imdb) Close() {
