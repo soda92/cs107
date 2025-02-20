@@ -1,9 +1,9 @@
 package main
 
 type film struct {
-	title            string
-	year             int
-	indexInMovieFile int
+	title             string
+	year              int
+	offsetInMovieFile int
 }
 
 func determinePathToData(userSelectedPath *string) string {

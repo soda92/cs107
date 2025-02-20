@@ -9,8 +9,6 @@ import (
 )
 
 func (db *imdb) DecodeActor(index int) (string, []int32) {
-
-
 	name := GetRecord(db.actorFile, index)
 	len1 := strings.IndexByte(name, 0x00)
 	totalLen := len1
@@ -32,12 +30,12 @@ func (db *imdb) DecodeActor(index int) (string, []int32) {
 		totalLen += 2
 	}
 
-	movieIndexes := make([]int32, numMovies)
+	offsets := make([]int32, numMovies)
 	for i := 0; i < int(numMovies); i++ {
-		binary.Read(reader2, binary.NativeEndian, &movieIndexes[i])
+		binary.Read(reader2, binary.NativeEndian, &offsets[i])
 	}
 	// fmt.Println(name1)
-	return name1, movieIndexes
+	return name1, offsets
 }
 
 func GetRecord(db []byte, index int) string {
@@ -71,4 +69,10 @@ func (db *imdb) DecodeMovie(index int) film {
 func (db *imdb) getCastFromMovie(index int) []string {
 	var ret []string
 	return ret
+}
+
+func GetOffsetByIndex(db []byte, index int) int {
+	var offset int32
+	binary.Decode(db[index*4:(index+1)*4], binary.NativeEndian, &offset)
+	return int(offset)
 }

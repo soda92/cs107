@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/binary"
+	"fmt"
+	"log"
 	"os"
 )
 
@@ -64,7 +66,7 @@ func (db *imdb) getFilms(movieIndexes []int32) []film {
 
 		films[i].title = movieName
 		films[i].year = year + 1900
-		films[i].indexInMovieFile = int(index)
+		films[i].offsetInMovieFile = int(index)
 	}
 	return films
 }
@@ -94,11 +96,11 @@ func (db *imdb) getCredits(r *string) ([]film, bool) {
 		return ret, false
 	}
 
-	_, movieIndexes := db.DecodeActor(index)
+	_, offsets := db.DecodeActor(index)
 
 	// fmt.Println(name)
 
-	films := db.getFilms(movieIndexes)
+	films := db.getFilms(offsets)
 	return films, true
 }
 
@@ -141,6 +143,10 @@ func (db *imdb) getCast(movie film) ([]string, bool) {
 	if !found {
 		var ret []string
 		return ret, false
+	}
+	offset2 := GetOffsetByIndex(db.movieFile, index)
+	if movie.offsetInMovieFile != offset2 {
+		log.Fatal("offset doesn't match")
 	}
 
 	casts := db.getCastFromMovie(index)
