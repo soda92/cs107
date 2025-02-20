@@ -29,3 +29,16 @@ func TestIndexOf(t *testing.T) {
 		t.Fatal("index error")
 	}
 }
+
+func TestCasts(t *testing.T) {
+	var movie film
+	movie.title = "Anno Domini"
+	movie.year = 2000
+	movie.offsetInMovieFile = 1841336
+	db := NewImdb(determinePathToData(nil))
+
+	casts, found := db.getCast(movie)
+	if len(casts) != 6 || !found {
+		t.Fatal("casts wrong")
+	}
+}

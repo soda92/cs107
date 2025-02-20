@@ -9,7 +9,7 @@ import (
 
 func IndexOf(data []byte, val byte) int {
 	for i, v := range data {
-		if data[i] == v {
+		if val == v {
 			return i
 		}
 	}
@@ -18,12 +18,11 @@ func IndexOf(data []byte, val byte) int {
 }
 
 func (db *imdb) DecodeActorRecord(record []byte) (string, []int32) {
-	// name := GetRecord(db.actorFile, index)
 	len1 := IndexOf(record, 0x00)
 	totalLen := len1
-	name1 := record[:len1]
+	name := string(record[:len1])
 	rest := record[len1:]
-	if len(name1)%2 != 0 {
+	if len(name)%2 != 0 {
 		rest = rest[1:]
 		totalLen += 1
 	}
@@ -43,8 +42,7 @@ func (db *imdb) DecodeActorRecord(record []byte) (string, []int32) {
 	for i := 0; i < int(numMovies); i++ {
 		binary.Read(reader2, binary.NativeEndian, &offsets[i])
 	}
-	// fmt.Println(name1)
-	return string(name1), offsets
+	return name, offsets
 }
 
 func (db *imdb) DecodeActor(index int) (string, []int32) {
@@ -84,7 +82,39 @@ func (db *imdb) DecodeMovie(index int) film {
 }
 
 func (db *imdb) getCastFromMovie(index int) []string {
+	movie := db.DecodeMovie(index)
+	record := GetRecord(db.movieFile, index)
+	totalLen := len(movie.title) + 1 /*\0*/ + 1 /*year*/
+	if totalLen%2 != 0 {
+		totalLen += 1
+	}
+	record = record[totalLen:]
+	bin := []byte(record)
+	var numActors int16
+	binary.Decode(bin[0:2], binary.NativeEndian, &numActors)
+	totalLen += 2
+	offset := 2
+	if totalLen%4 != 0 {
+		totalLen += 2
+		offset += 2
+	}
+	record = record[offset:]
+	// if len(record) != int(numActors)*4 {
+	// 	log.Fatal("movie record corrupt: record doesn't have correct number of actors")
+	// }
+	// bin = []byte(record)
+	reader := bytes.NewReader(record)
+	var offsets []int
+	for range numActors {
+		var offset int32
+		binary.Read(reader, binary.NativeEndian, &offset)
+		offsets = append(offsets, int(offset))
+	}
 	var ret []string
+	for _, offset := range offsets {
+		actor, _ := db.DecodeActorFromOffset(offset)
+		ret = append(ret, actor)
+	}
 	return ret
 }
 
