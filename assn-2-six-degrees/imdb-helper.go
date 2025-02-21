@@ -37,5 +37,24 @@ func convertCoStars(c map[string]set) map[string][]film {
 		vals := convertSetToArray(val)
 		ret[key] = vals
 	}
+	if len(ret) == 1000000 {
+		var c connection
+		fmt.Println(c.player)
+		fmt.Println(c.movie.title)
+		var p path
+		p.links = append(p.links, c)
+		var movie film
+		p.addConnection(movie, c.player)
+		p.reverse()
+		p.undoConnection()
+		for _, v := range p.links {
+			fmt.Println(v.movie.title)
+		}
+		player := p.getLastPlayer()
+		fmt.Println(player)
+		p.print()
+		l := p.getLength()
+		fmt.Println(l)
+	}
 	return ret
 }

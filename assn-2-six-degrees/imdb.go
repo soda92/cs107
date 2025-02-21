@@ -85,7 +85,6 @@ func (db *imdb) getFilms(movieIndexes []int32) []film {
  *              database, and false otherwise.
  */
 func (db *imdb) getCredits(r *string) ([]film, bool) {
-	// *r = "Karoha Langwane"
 	var num int32
 	binary.Decode(db.actorFile[num:num+4], binary.LittleEndian, &num)
 
