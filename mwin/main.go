@@ -9,49 +9,30 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func NewWindow(a fyne.App, text string) fyne.Window {
-	w := a.NewWindow(text)
-
-	w.Resize(fyne.NewSize(200, 100))
-	w.CenterOnScreen()
-	w.Content().Move(w.Content().Position().SubtractXY(200, 0))
-	w.Show()
-	return w
+func NewWindow(a fyne.App, text string) *container.InnerWindow {
+	w := widget.NewLabel(text)
+	w2 := container.NewInnerWindow(text, container.NewVBox(w))
+	w2.Resize(fyne.NewSize(200, 200))
+	return w2
 }
 
-func MoveWindow(w fyne.Window, offsetx int) {
+func MoveWindow(w *container.InnerWindow, offsetx int) {
 	time.Sleep(1 * time.Second)
-	w.Content().Move(w.Content().Position().AddXY(float32(offsetx), 0))
-}
-
-func main1() {
-	a := app.New()
-	w1 := NewWindow(a, "w1")
-	w2 := NewWindow(a, "w2")
-	go MoveWindow(w1, -200)
-	go MoveWindow(w2, 200)
-	a.Run()
+	// w.Content().Move(w.Content().Position().AddXY(float32(offsetx), 0))
+	w.Move(w.Position().AddXY(float32(offsetx), 0))
 }
 
 func main() {
-	myApp := app.New()
-	myWindow := myApp.NewWindow("TabContainer Widget")
-
-	tabs := container.NewDocTabs(
-		container.NewTabItem("Tab 1", widget.NewLabel("Hello")),
-		container.NewTabItem("Tab 2", widget.NewLabel("World!")),
-	)
-
-	iw := container.NewInnerWindow("123", tabs)
-
-	a := container.NewMultipleWindows(iw)
-
-	//tabs.Append(container.NewTabItemWithIcon("Home", theme.HomeIcon(), widget.NewLabel("Home tab")))
-
-	// tabs.SetTabLocation(container.TabLocationLeading)
-	// myWindow.Resize(fyne.NewSize(200, 400))
-	a.Resize(fyne.NewSize(400, 400))
-
-	myWindow.SetContent(a)
-	myWindow.ShowAndRun()
+	a := app.New()
+	w1 := NewWindow(a, "w1")
+	w2 := NewWindow(a, "w2")
+	w := container.NewMultipleWindows(w1, w2)
+	w0 := a.NewWindow("Window")
+	w0.SetContent(w)
+	w0.Resize(fyne.NewSize(400, 400))
+	w0.CenterOnScreen()
+	w0.Show()
+	go MoveWindow(w1, 100)
+	go MoveWindow(w2, 300)
+	a.Run()
 }
