@@ -55,5 +55,28 @@ func main() {
 	w0.Show()
 	MoveWindow(w1, 100)
 	MoveWindow(w2, 300)
+	c2 := make(chan fyne.Position)
+	g1 := func() {
+		time.Sleep(1 * time.Second)
+		baseLoc := w1.Position()
+		for {
+			time.Sleep(10 * time.Millisecond)
+			loc := w1.Position()
+
+			delta := loc.SubtractXY(baseLoc.X, baseLoc.Y)
+			c2 <- delta
+
+		}
+	}
+	g2 := func() {
+		time.Sleep(1 * time.Second)
+		for {
+			v := <-c2
+			w2.Move(w.Position().AddXY(v.X+400, v.Y))
+			// w1.Resize(v)
+		}
+	}
+	go g1()
+	go g2()
 	a.Run()
 }
