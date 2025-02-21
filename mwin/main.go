@@ -42,11 +42,13 @@ func main() {
 		for {
 			time.Sleep(100 * time.Millisecond)
 			s := w1.Size()
+			// fmt.Println(s)
 			c <- s
 		}
 	}
 	go f()
 	go f2()
+	w1.Resize(fyne.NewSize(303.2, 199.6))
 	w := container.NewMultipleWindows(w1, w2)
 	w0 := a.NewWindow("Window")
 	w0.SetContent(w)
@@ -57,19 +59,19 @@ func main() {
 	MoveWindow(w2, 300)
 	c2 := make(chan fyne.Position)
 	g1 := func() {
-		time.Sleep(1 * time.Second)
+		// time.Sleep(1 * time.Second)
 		baseLoc := w1.Position()
 		for {
 			time.Sleep(10 * time.Millisecond)
 			loc := w1.Position()
 
-			delta := loc.SubtractXY(baseLoc.X, baseLoc.Y)
+			delta := loc.SubtractXY(baseLoc.X, baseLoc.Y+4.2)
 			c2 <- delta
 
 		}
 	}
 	g2 := func() {
-		time.Sleep(1 * time.Second)
+		// time.Sleep(1 * time.Second)
 		for {
 			v := <-c2
 			w2.Move(w.Position().AddXY(v.X+400, v.Y))
