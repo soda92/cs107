@@ -1,6 +1,7 @@
 package main
 
 import (
+	// "fmt"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -9,7 +10,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func NewWindow(a fyne.App, text string) *container.InnerWindow {
+func NewWindow(c1 chan fyne.Size, text string) *container.InnerWindow {
 	w := widget.NewLabel(text)
 	w2 := container.NewInnerWindow(text, container.NewVBox(w))
 	w2.Resize(fyne.NewSize(200, 200))
@@ -24,15 +25,35 @@ func MoveWindow(w *container.InnerWindow, offsetx int) {
 
 func main() {
 	a := app.New()
-	w1 := NewWindow(a, "w1")
-	w2 := NewWindow(a, "w2")
+	c := make(chan fyne.Size)
+	w1 := NewWindow(c, "w1")
+	w2 := NewWindow(c, "w2")
+	f := func() {
+		// var v fyne.Size
+		for {
+			v := <-c
+			w2.Resize(v)
+			// w1.Resize(v)
+		}
+	}
+
+	f2 := func() {
+		// var v fyne.Size
+		for {
+			time.Sleep(100 * time.Millisecond)
+			s := w1.Size()
+			c <- s
+		}
+	}
+	go f()
+	go f2()
 	w := container.NewMultipleWindows(w1, w2)
 	w0 := a.NewWindow("Window")
 	w0.SetContent(w)
-	w0.Resize(fyne.NewSize(400, 400))
+	w0.Resize(fyne.NewSize(800, 400))
 	w0.CenterOnScreen()
 	w0.Show()
-	go MoveWindow(w1, 100)
-	go MoveWindow(w2, 300)
+	MoveWindow(w1, 100)
+	MoveWindow(w2, 300)
 	a.Run()
 }
