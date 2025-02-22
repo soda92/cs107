@@ -13,7 +13,8 @@
             "args": [
                 "-cmd",
                 "-test",
-                "-name=asdf",
+                "-name",
+                "Ewan McGregor"
             ],
             "console": "integratedTerminal"
         },

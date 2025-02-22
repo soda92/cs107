@@ -10,5 +10,5 @@ type myTheme struct {
 }
 
 func NewMyTheme() fyne.Theme {
-	return &myTheme{Theme: theme.DarkTheme()}
+	return &myTheme{Theme: theme.DefaultTheme()}
 }

@@ -5,7 +5,7 @@ import "fmt"
 func stall() string {
 	var dummy string
 	fmt.Printf("[Press enter to continue]")
-	dummy = readline()
+	// dummy = readline()
 	return dummy
 }
 
@@ -34,6 +34,9 @@ func listMovies(player string, credits []film) {
 	kNumFilesToPrint := 10
 
 	fmt.Printf("%s has starred in %d films.\n", player, len(credits))
+	if len(credits) == 0 {
+		return
+	}
 	fmt.Println("These films are:")
 
 	numMovies := 1
@@ -77,35 +80,52 @@ func listMovies(player string, credits []film) {
  */
 func listCostars(player string, credits []film, db imdb) {
 	kNumCoStarsToPrint := 10
-	var costars map[string][]film
-	for i, _ := range credits {
+
+	costars2 := make(map[string]set)
+	costars0 := make(map[string][]film)
+	for i := range credits {
 		movie := credits[i]
 		cast, _ := db.getCast(movie)
 
-		for j, _ := range cast {
+		for j := range cast {
 			costar := cast[j]
 			if costar != player {
-				costars[costar] = append(costars[costar], movie)
+				if costars2[costar] == nil {
+					costars2[costar] = make(set)
+				}
+				costars2[costar] = addSet(costars2[costar], movie)
+				costars0[costar] = append(costars0[costar], movie)
 			}
 		}
 	}
 
-	fmt.Printf("%s has worked with %d other people.\n")
+	costars := convertCoStars(costars2)
+	if !MapEqual(costars, costars0) {
+		fmt.Print("")
+	}
+
+	fmt.Printf("%s has worked with %d other people.\n", player, len(costars))
+	if len(costars) == 0 {
+		return
+	}
 	fmt.Println("Those other people are:")
 
 	numCostars := 0
-	startindex := 0
+	curr := 0
 	for costar, films := range costars {
-		fmt.Print("     %d.) %s", numCostars, costar)
+		fmt.Printf("     %d.) %s", numCostars+1, costar)
 		numCostars += 1
 		if len(films) > 1 {
 			fmt.Printf(" (in %d different films)", len(films))
 		}
 		fmt.Println()
-		startindex += 1
+		curr += 1
+		if curr > kNumCoStarsToPrint {
+			break
+		}
 	}
 
-	if startindex < len(costars) {
+	if curr < len(costars) {
 		if len(costars) > 2*kNumCoStarsToPrint {
 			printFill()
 		}
@@ -114,22 +134,22 @@ func listCostars(player string, credits []film, db imdb) {
 				break
 			}
 			numCostars += 1
-			startindex += 1
+			curr += 1
 		}
 
 		i := 0
 		for costar, films := range costars {
-			if i < startindex {
+			if i < curr {
 				i += 1
 				continue
 			}
-			i += 1
 
-			fmt.Print("     %d.) %s", numCostars, costar)
+			fmt.Printf("     %d.) %s", i+1, costar)
 			if len(films) > 1 {
 				fmt.Printf(" (in %d different films)", len(films))
 			}
 			fmt.Println()
+			i += 1
 		}
 	}
 

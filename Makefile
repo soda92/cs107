@@ -15,6 +15,12 @@ all:
 run1:
 	cd assn-1-rsg; make run
 
+assn2:
+	cd assn-2-six-degrees; make
+
+assn2g:
+	cd assn-2-six-degrees; make go
+
 2m: pre
 	cd assn-2-six-degrees; make run_a
 
